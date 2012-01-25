@@ -31,14 +31,19 @@ class Form extends BaseModule
      */
     public function init()
     {
+        $tables = $this->getBender()->getDatabase()->getTables()->filterUseForm();
+
+        if( $tables->isEmpty() ){
+            return ;
+        }
+
         $classes = $this->getBender()->getClasses();
         $classes->add('BaseForm', new PhpClass($this->getApplicationNamespace()."Form/BaseForm.php"));
         $classes->add('BaseValidator', new PhpClass($this->getApplicationNamespace()."Validator/BaseValidator.php"));
         $classes->add('BaseFilter', new PhpClass($this->getApplicationNamespace()."Filter/BaseFilter.php"));
 
         $self = $this;
-        $this->getBender()->getDatabase()->getTables()->filterUseForm()
-        ->each(function (Table $table) use($classes, $self){
+        $tables->each(function(Table $table) use($classes, $self){
             $object = $table->getObject();
             $classes->add($object.'Form', new PhpClass($self->getApplicationNamespace()."Form/{$object}Form.php"));
             $classes->add($object.'Validator', new PhpClass($self->getApplicationNamespace()."Validator/{$object}Validator.php"));
@@ -52,10 +57,14 @@ class Form extends BaseModule
      */
     public function getFiles()
     {
+        $files = new FileCollection();
         $classes = $this->getBender()->getClasses();
         $tables = $this->getBender()->getDatabase()->getTables()->filterUseForm();
 
-        $files = new FileCollection();
+        if( $tables->isEmpty() ){
+            return $files;
+        }
+
         $files->append(new File($classes->get('BaseForm')->getRoute(), $this->getView()->fetch('base-form.tpl')));
         $files->append(new File($classes->get('BaseValidator')->getRoute(), $this->getView()->fetch('base-validator.tpl')));
         $files->append(new File($classes->get('BaseFilter')->getRoute(), $this->getView()->fetch('base-filter.tpl')));
