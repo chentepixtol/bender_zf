@@ -70,9 +70,6 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             );
             $data = array_filter($data, array($this, 'isNotNull'));
             $this->getDb()->update({{ Bean }}::TABLENAME, $data, "{{ table.getPrimaryKey() }} = '{${{ bean }}->{{ table.getPrimaryKey().getter() }}()}'");
-{% if table.hasPrimaryKey() %}
-            ${{ bean }}->{{ table.getPrimaryKey().setter() }}($this->getDb()->lastInsertId());
-{% endif %}
 {% if parent %}
             parent::update(${{ bean }});
 {% endif %}
