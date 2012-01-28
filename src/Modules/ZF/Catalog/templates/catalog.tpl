@@ -89,14 +89,99 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
         try
         {
             $where = array($this->getDb()->quoteInto('{{ table.getPrimaryKey() }} = ?', ${{ primaryKey }}));
-            $this->db->delete({{ Bean }}::TABLENAME, $where);
+            $this->getDb()->delete({{ Bean }}::TABLENAME, $where);
         }
         catch(\Exception $e)
         {
             $this->throwException("The {{ Bean }} can't be deleted\n", $e);
         }
     }
+    
+{% for manyToMany in table.getManyToManyCollection %}
+{% set localColumn = manyToMany.getLocalColumn() %}
+{% set relationColumn = manyToMany.getRelationColumn() %}
+{% set relationTable = manyToMany.getRelationTable() %}
+{% set foreignObject = classes.get(manyToMany.getForeignTable().getObject().toString()) %}
+{% set foreignTable = manyToMany.getForeignTable() %}
+{% set relationForeignColumn = manyToMany.getRelationForeignColumn() %}
+{% set pk1 = localColumn.getName() %}
+{% set pk2 = foreignTable.primaryKey().getName() %}
 
+    /**
+     * Link a {{ Bean }} to {{ foreignObject }}
+     * @param int ${{ pk1.toCamelCase }}
+     * @param int ${{ pk2.toCamelCase() }}
+{% for field in relationTable.getColumns().nonForeignKeys() %}
+     * @param {{ field.cast('php') }} ${{ field.getName().toCamelCase() }}
+{% endfor %}
+     */ 
+    public function linkTo{{ foreignObject }}(${{ pk1.toCamelCase }}, ${{ pk2.toCamelCase() }}{% for field in relationTable.getColumns().nonForeignKeys() %}, ${{ field.getName().toCamelCase() }}{% endfor%})
+    {
+        try
+        {
+            $this->unlinkFrom{{ foreignObject }}(${{ pk1.toCamelCase() }}, ${{ pk2.toCamelCase() }});
+            $data = array(
+                '{{ pk1 }}' => ${{ pk1.toCamelCase() }},
+                '{{ pk2 }}' => ${{ pk2.toCamelCase() }},
+{% for field in relationTable.getColumns().nonForeignKeys() %}
+                '{{ field }}' => ${{ field.getName().toCamelCase() }},
+{% endfor%}
+            );
+            $this->getDb()->insert('{{ relationTable.getName().toString() }}', $data);
+        }
+        catch(\Exception $e)
+        {
+            $this->throwException("Can't link {{ Bean }} to {{ foreignObject }}", $e);
+        }
+    }
+
+    /**
+     * Unlink a {{ Bean }} from {{ foreignObject }}
+     * @param int ${{ pk1.toCamelCase() }}
+     * @param int ${{ pk2.toCamelCase() }}
+     */
+    public function unlinkFrom{{ foreignObject }}(${{ pk1.toCamelCase() }}, ${{ pk2.toCamelCase() }})
+    {
+        try
+        {
+            $where = array(
+                $this->getDb()->quoteInto('{{ pk1 }} = ?', ${{ pk1.toCamelCase() }}),
+                $this->getDb()->quoteInto('{{ pk2 }} = ?', ${{ pk2.toCamelCase() }}),
+            );
+            $this->getDb()->delete('{{ relationTable.getName().toString() }}', $where);
+        }
+        catch(\Exception $e)
+        {
+            $this->throwException("Can't unlink {{ Bean }} to {{ foreignObject }}", $e);
+        }
+    }
+
+    /**
+     * Unlink all {{ foreignObject }} relations
+     * @param int ${{ pk1.toCamelCase() }}
+{% for field in source.getNonForeignKeys() %}
+     * @param {{ field.cast('php') }} ${{ field.getName().toCamelCase() }}
+{% endfor %}
+     */
+    public function unlinkAll{{ foreignObject }}(${{ pk1.toCamelCase() }}{% for field in relationTable.getColumns().nonForeignKeys() %}, ${{ field.getName().toCamelCase() }} = null{% endfor%})
+    {
+        try
+        {
+            $where = array(
+                $this->getDb()->quoteInto('{{ pk1 }} = ?', ${{ pk1.toCamelCase() }}),
+            );
+{% for field in relationTable.getColumns().nonForeignKeys() %}
+            if( null != ${{ field.getName().toCamelCase() }} ) $where[] = $this->getDb()->quoteInto('{{ field }} = ?', ${{ field.getName().toCamelCase }});
+{% endfor %}
+            $this->getDb()->delete('{{ relationTable.getName().toString() }}', $where);
+        }
+        catch(\Exception $e)
+        {
+            $this->throwException("Can't unlink {{ Bean }} to {{ foreignObject }}", $e);
+        }
+    }
+{% endfor %}
+    
     /**
      *
      * makeCollection
