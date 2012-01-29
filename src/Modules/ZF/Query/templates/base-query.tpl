@@ -72,6 +72,14 @@ abstract class {{ BaseQuery }} extends Query
     }
     
     /**
+     * @return int
+     */
+    public function count($field = '*'){
+       $this->addColumn($field, 'count', Query::COUNT);
+       return (int) $this->fetchOne();
+    }
+    
+    /**
      * @return \{{ Option.getFullName() }}
      */
     public function findOneOption(){

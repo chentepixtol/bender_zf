@@ -2,8 +2,8 @@
 {% set BaseForm = classes.get('BaseForm') %}
 {{ BaseForm.printNamespace() }}
 
-use ZFriendly\Form\Twitter as TwitterForm;
 {% if isZF2 %}
+use ZFriendly\Form\Twitter as TwitterForm;
 use Zend\View\PhpRenderer as ZendView;
 {% else %}
 use Zend_View as ZendView;
@@ -16,7 +16,7 @@ use Zend_View as ZendView;
  * @author chente
  *
  */
-class {{ BaseForm }} extends TwitterForm
+class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\Zend_Form{% endif %}
 {
 
     /**

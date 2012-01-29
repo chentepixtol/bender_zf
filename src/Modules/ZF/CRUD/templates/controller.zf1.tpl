@@ -29,8 +29,24 @@ class {{ Controller }} extends BaseController
      */
     public function listAction()
     {
-        ${{ collection }} = {{ Query }}::create()->find();
+        $page = $this->getRequest()->getParam('page', 1);
+       
+        $this->view->form = $form = $this->getFilterForm();
+        if( $this->getRequest()->isPost() ){
+            $form->populate($this->getRequest()->getParams());
+        }
+        $total = {{ Query }}::create()->filter($form->getValues())->count();
+        
+        $maxPerPage = 5;
+        $paginator = Zend_Paginator::factory($total);
+        $paginator->setItemCountPerPage($maxPerPage);
+        $paginator->setCurrentPageNumber($page);
+
+        ${{ collection }} = {{ Query }}::create()
+            ->filter($form->getValues())
+            ->page($page, $maxPerPage)->find();
         $this->view->{{ collection }} = ${{ collection }};
+        $this->view->paginator = $paginator;
     }
 
     /**
@@ -121,6 +137,20 @@ class {{ Controller }} extends BaseController
         $form = new {{ Form }}();
         $submit = new Zend_Form_Element_Submit("send");
         $submit->setLabel("Guardar");
+        $form->addElement($submit)->setMethod('post');
+        //$form->twitterDecorators();
+        return $form;
+    }
+    
+    /**
+     *
+     * @return {{ Form.getFullName() }}
+     */
+    protected function getFilterForm()
+    {
+        $form = new {{ Form }}();
+        $submit = new Zend_Form_Element_Submit("send");
+        $submit->setLabel("Buscar");
         $form->addElement($submit)->setMethod('post');
         //$form->twitterDecorators();
         return $form;
