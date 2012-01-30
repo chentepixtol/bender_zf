@@ -36,6 +36,12 @@ abstract class {{ BaseQuery }} extends Query
      * @return {{ BaseQuery }}
      */
     abstract public function pk($value);
+    
+    /**
+     * @abstract
+     * @return array
+     */
+    abstract public function fetchIds();
 
     /**
      * @return {{ BaseQuery }}

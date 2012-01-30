@@ -63,6 +63,14 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     }
     
     /**
+     * @return array
+     */
+    public function fetchIds(){
+       $this->removeColumn()->addColumn({{ Bean }}::{{ table.getPrimaryKey().getName().toUpperCase() }}, 'ids');
+       return $this->fetchCol();
+    }
+    
+    /**
      * build fromArray
      * @param array $fields
      * @param string $prefix

@@ -19,7 +19,7 @@ use Query\Query;
  *
  * @package {{ Catalog.getNamespace() }}
  * @author {{ meta.get('author') }}
- * @method PersonCatalog getInstance
+ * @method {{ Catalog }} getInstance
  * @method {{ Bean }} getOneByQuery
  * @method {{ Collection }} getByQuery
  */
@@ -99,6 +99,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
     
 {% for manyToMany in table.getManyToManyCollection %}
 {% set relationColumn = manyToMany.getRelationColumn() %}
+{% set relationTable = manyToMany.getRelationTable() %}
 {% set foreignObject = classes.get(manyToMany.getForeignTable().getObject().toString()) %}
 {% set relationForeignColumn = manyToMany.getRelationForeignColumn() %}
 {% set pk1 = relationColumn.getName() %}
