@@ -98,14 +98,11 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
     }
     
 {% for manyToMany in table.getManyToManyCollection %}
-{% set localColumn = manyToMany.getLocalColumn() %}
 {% set relationColumn = manyToMany.getRelationColumn() %}
-{% set relationTable = manyToMany.getRelationTable() %}
 {% set foreignObject = classes.get(manyToMany.getForeignTable().getObject().toString()) %}
-{% set foreignTable = manyToMany.getForeignTable() %}
 {% set relationForeignColumn = manyToMany.getRelationForeignColumn() %}
-{% set pk1 = localColumn.getName() %}
-{% set pk2 = foreignTable.primaryKey().getName() %}
+{% set pk1 = relationColumn.getName() %}
+{% set pk2 = relationForeignColumn.getName() %}
 
     /**
      * Link a {{ Bean }} to {{ foreignObject }}

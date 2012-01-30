@@ -52,10 +52,13 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     }
     
     /**
+     * @param mixed $value 
      * @return {{ Query }}
      */
-    public function primaryKey($value, $comparison = \Query\Criterion::AUTO, $mutatorColumn = null, $mutatorValue = null){
-        $this->whereAdd({{ Bean }}::{{ table.getPrimaryKey().getName().toUpperCase() }}, $value, $comparison, $mutatorColumn, $mutatorValue);
+    public function pk($value){
+        $this->filter(array(
+            {{ Bean }}::{{ table.getPrimaryKey().getName().toUpperCase() }} => $value,
+        ));
         return $this;
     }
     
@@ -105,6 +108,32 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     {
         $this->innerJoinOn(\{{ classForeign.getFullName() }}::TABLENAME, $aliasForeignTable)
             ->equalFields(array($alias, '{{ foreignKey.getLocal() }}'), array($aliasForeignTable, '{{ foreignKey.getForeign() }}'));
+
+        return $this;
+    }
+
+{% endfor %}
+{% for manyToMany in table.getManyToManyCollection %}
+{% set localColumn = manyToMany.getLocalColumn() %}
+{% set relationColumn = manyToMany.getRelationColumn() %}
+{% set relationTable = manyToMany.getRelationTable() %}
+{% set classForeign = classes.get(manyToMany.getForeignTable().getObject().toString()) %}
+{% set foreignTable = manyToMany.getForeignTable() %}
+{% set relationForeignColumn = manyToMany.getRelationForeignColumn() %}
+{% set pk1 = relationColumn.getName() %}
+{% set pk2 = relationForeignColumn.getName() %}
+    /**
+     * @param string $alias
+     * @param string aliasForeignTable
+     * @return {{ Query }}
+     */
+    public function innerJoin{{ classForeign }}($alias = '{{ Bean }}', $aliasForeignTable = '{{ classForeign }}')
+    {
+        $this->innerJoinOn('{{ relationTable.getName().toString() }}', '{{ Bean }}2{{ classForeign }}')
+            ->equalFields(array($alias, '{{ localColumn.getName().toString() }}'), array('{{ Bean }}2{{ classForeign }}', '{{ relationColumn.getName().toString() }}'));
+            
+        $this->innerJoinOn(\{{ classForeign.getFullName() }}::TABLENAME, $aliasForeignTable)
+            ->equalFields(array('{{ Bean }}2{{ classForeign }}', '{{ relationForeignColumn.getName().toString() }}'), array($aliasForeignTable, '{{ foreignTable.getPrimaryKey().getName().toString() }}'));
 
         return $this;
     }

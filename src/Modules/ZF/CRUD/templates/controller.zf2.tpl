@@ -56,7 +56,7 @@ class {{ Controller }} extends ActionController
     public function editAction()
     {
         $id = $this->getRouteParam('id');
-        ${{ bean }} = {{ Query }}::create()->primaryKey($id)
+        ${{ bean }} = {{ Query }}::create()->pk($id)
             ->findOneOrThrow("No existe el {{ Bean }} con id {$id}");
 
         $form = $this->getForm()
@@ -108,7 +108,7 @@ class {{ Controller }} extends ActionController
             }
 
             $id = $this->getRouteParam('id');
-            ${{ bean }} = {{ Query }}::create()->primaryKey($id)
+            ${{ bean }} = {{ Query }}::create()->pk($id)
                 ->findOneOrThrow("No existe el {{ Bean }} con id {$id}");
 
             {{ Factory }}::populate(${{ bean }}, $form->getValues());

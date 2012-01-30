@@ -35,7 +35,7 @@ abstract class {{ BaseQuery }} extends Query
      * @abstract
      * @return {{ BaseQuery }}
      */
-    abstract public function primaryKey($value, $comparison = \Query\Criterion::AUTO, $mutatorColumn = null, $mutatorValue = null);
+    abstract public function pk($value);
 
     /**
      * @return {{ BaseQuery }}
