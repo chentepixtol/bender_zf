@@ -59,11 +59,12 @@ class {{ Option }}
     /**
      *
      * @param string $message
+     * @throws \UnexpectedValueException
      * @return mixed
      */
     public function getOrThrow($message){
         if( $this->isNull() ){
-            throw new \InvalidArgumentException($message);
+            throw new \UnexpectedValueException($message);
         }
         return $this->get();
     }

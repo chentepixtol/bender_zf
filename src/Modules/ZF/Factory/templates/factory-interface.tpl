@@ -9,7 +9,7 @@ interface {{ classes.get('Factory') }}
      *
      * @static
      * @param array $fields
-     * @return {{ classes.get('Bean') }}
+     * @return \{{ classes.get('Bean').getFullName() }}
      */
     public static function createFromArray($fields);
     

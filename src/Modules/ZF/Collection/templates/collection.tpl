@@ -8,12 +8,15 @@
  * {{ Collection }}
  *
  * @author {{ meta.get('author') }}
- * @method {{ Bean }} current
- * @method {{ Bean }} read
- * @method {{ Bean }} getOne
- * @method {{ Bean }} getByPK
- * @method {{ Collection }} intersect
- * @method {{ Collection }} filter
+ * @method \{{ Bean.getFullName() }} current()
+ * @method \{{ Bean.getFullName() }} read()
+ * @method \{{ Bean.getFullName() }} getOne()
+ * @method \{{ Bean.getFullName() }} getByPK() getByPK($primaryKey)
+ * @method \{{ Collection.getFullName() }} intersect() intersect(\{{ Collection.getFullName() }} $collection)
+ * @method \{{ Collection.getFullName() }} filter() filter(callable $function)
+ * @method \{{ Collection.getFullName() }} merge() merge(\{{ Collection.getFullName() }} $collection)
+ * @method \{{ Collection.getFullName() }} diff() diff(\{{ Collection.getFullName() }} $collection)
+ * @method \{{ Collection.getFullName() }} copy()
  */
 class {{ Collection }} extends {{ classes.get('Collection') }}
 {

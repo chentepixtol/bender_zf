@@ -12,7 +12,7 @@ class {{ Factory }}{% if parent %} extends {{ classes.get(parent.getObject()~'Fa
      *
      * @static
      * @param array $fields
-     * @return {{ Bean }}
+     * @return \{{ Bean.getFullName() }}
      */
     public static function createFromArray($fields)
     {

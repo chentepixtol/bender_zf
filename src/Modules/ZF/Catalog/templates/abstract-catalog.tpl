@@ -46,14 +46,14 @@ abstract class {{ AbstractCatalog }} extends {{ TransactionalCatalog }} implemen
     /**
      *
      * makeCollection
-     * @return BaseCollection
+     * @return \{{ BaseCollection.getFullName() }}
      */
     abstract protected function makeCollection();
 
     /**
      *
      * makeBean
-     * @return Bean
+     * @return \{{ Bean.getFullName() }}
      */
     abstract protected function makeBean($resultset);
 
@@ -69,7 +69,7 @@ abstract class {{ AbstractCatalog }} extends {{ TransactionalCatalog }} implemen
      *
      * @param Query $query
      * @param {{  Storage }} $storage
-     * @return {{ BaseCollection }}
+     * @return \{{ BaseCollection.getFullName() }}
      */
     public function getByQuery(Query $query, {{ Storage }} $storage = null)
     {
@@ -92,7 +92,7 @@ abstract class {{ AbstractCatalog }} extends {{ TransactionalCatalog }} implemen
      *
      * @param Query $query
      * @param {{  Storage }} $storage
-     * @return {{ Bean }}
+     * @return \{{ Bean.getFullName() }}
      */
     public function getOneByQuery(Query $query, {{ Storage }} $storage = null)
     {
@@ -149,6 +149,7 @@ abstract class {{ AbstractCatalog }} extends {{ TransactionalCatalog }} implemen
      * 
      * @param Query $query
      * @param string $method
+     * @return mixed
      * @throws Exception
      */
     protected function executeDbMethod(Query $query, $method, {{ Storage }} $storage = null)

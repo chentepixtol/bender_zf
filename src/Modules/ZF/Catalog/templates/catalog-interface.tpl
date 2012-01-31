@@ -56,14 +56,14 @@ interface {{ Catalog }}
      * getByQuery
      * @param Query $query
      * @param {{  Storage }} ${{ storage }}
-     * @return {{ Collection }}
+     * @return \{{ Collection.getFullName() }}
      */
     public function getByQuery(Query $query, {{  Storage }} ${{  storage }} = null);
 
     /**
      * @param Query $query
      * @param {{  Storage }} ${{ storage }}
-     * @return {{ Bean }}
+     * @return \{{ Bean.getFullName() }}
      */
     public function getOneByQuery(Query $query, {{  Storage }} ${{  storage }} = null);
 

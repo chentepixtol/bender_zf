@@ -19,9 +19,9 @@ use Query\Query;
  *
  * @package {{ Catalog.getNamespace() }}
  * @author {{ meta.get('author') }}
- * @method {{ Catalog }} getInstance
- * @method {{ Bean }} getOneByQuery
- * @method {{ Collection }} getByQuery
+ * @method \{{ Catalog.getFullName() }} getInstance() 
+ * @method \{{ Bean.getFullName() }} getOneByQuery() getOneByQuery(Query $query, {{ classes.get('Storage') }} $storage = null)
+ * @method \{{ Collection.getFullName() }} getByQuery() getByQuery(Query $query, {{ classes.get('Storage') }} $storage = null)
  */
 class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ 'Catalog') }}{% else %}{{ AbstractCatalog }} {% endif %} 
 {
@@ -183,7 +183,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
     /**
      *
      * makeCollection
-     * @return {{ Collection }}
+     * @return \{{ Collection.getFullName() }}
      */
     protected function makeCollection(){
         return new {{ Collection }}();
@@ -193,7 +193,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
      *
      * makeBean
      * @param array $resultset
-     * @return {{ Bean }}
+     * @return \{{ Bean.getFullName() }}
      */
     protected function makeBean($resultset){
         return {{ Factory }}::createFromArray($resultset);

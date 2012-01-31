@@ -113,11 +113,11 @@ abstract class {{ Collection }} extends \ArrayIterator
     }
 
     /**
-     * Merge two Collections
-     * @param Collection $collection
-     * @return Collection
+     * Merge two {{ Collection }}
+     * @param {{ Collection }} $collection
+     * @return {{ Collection }}
      */
-    public function merge(Collection $collection)
+    public function merge({{ Collection }} $collection)
     {
         $newCollection = $this->copy();
         $collection->each($this->appendFunction($newCollection));
@@ -125,7 +125,7 @@ abstract class {{ Collection }} extends \ArrayIterator
     }
 
     /**
-     * @return Collection
+     * @return {{ Collection }}
      */
     public function copy()
     {
@@ -151,14 +151,14 @@ abstract class {{ Collection }} extends \ArrayIterator
     }
 
     /**
-     * Intersect two Collections
+     * Intersect two {{ Collection }}
      * @param {{ Collection }} ${{ collection }}
      * @return {{ Collection }}
      */
     public function intersect({{ Collection }} ${{ collection }})
     {
         $newCollection = $this->newInstance();
-        $this->each(function(Collectable $collectable) use($newCollection, $collection){
+        $this->each(function({{ Collectable}} ${{ collectable }}) use($newCollection, $collection){
             if( $collection->containsIndex($collectable->getIndex()) ){
                 $newCollection->append($collectable);
             }
@@ -257,6 +257,7 @@ abstract class {{ Collection }} extends \ArrayIterator
     /**
      * @param mixed $start
      * @param callable $callable
+     * @return mixed 
      */
     public function foldLeft($start, $callable)
     {
