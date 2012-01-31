@@ -27,7 +27,7 @@ abstract class {{ BaseQuery }} extends Query
 
     /**
      * @abstract
-     * @return {{ classes.get('Catalog') }}
+     * @return \{{ classes.get('Catalog').getFullName() }}
      */
     abstract protected function getCatalog();
     
@@ -35,7 +35,7 @@ abstract class {{ BaseQuery }} extends Query
      * @abstract
      * @return {{ BaseQuery }}
      */
-    abstract public function pk($value);
+    abstract public function pk($primaryKey);
     
     /**
      * @abstract
@@ -61,7 +61,7 @@ abstract class {{ BaseQuery }} extends Query
     
     /**
      *
-     * @return {{ classes.get('Collection') }}
+     * @return \{{ classes.get('Collection').getFullName() }}
      */
     public function find(){
         return $this->getCatalog()->getByQuery($this, $this->storage);
@@ -69,7 +69,7 @@ abstract class {{ BaseQuery }} extends Query
 
     /**
      *
-     * @return {{ classes.get('Bean') }}
+     * @return \{{ classes.get('Bean').getFullName() }}
      */
     public function findOne()
     {
@@ -94,7 +94,7 @@ abstract class {{ BaseQuery }} extends Query
     
     /**
      * @param mixed $alternative
-     * @return {{ classes.get('Bean') }}
+     * @return \{{ classes.get('Bean').getFullName() }}
      */
     public function findOneOrElse($alternative){
         return $this->findOneOption()->getOrElse($alternative);
@@ -102,8 +102,8 @@ abstract class {{ BaseQuery }} extends Query
     
     /**
      * @param mixed $message
-     * @return {{ classes.get('Bean') }}
-     * @throws \InvalidArgumentException
+     * @return \{{ classes.get('Bean').getFullName() }}
+     * @throws \UnexpectedValueException
      */
     public function findOneOrThrow($message){
         return $this->findOneOption()->getOrThrow($message);
@@ -142,16 +142,16 @@ abstract class {{ BaseQuery }} extends Query
     }
     
     /**
-     * @param Storage $storage
+     * @param {{ Storage }} $storage
      * @return {{ BaseQuery }}
      */
-    public function setStorage(Storage $storage){
+    public function setStorage({{ Storage }} $storage){
         $this->storage = $storage;
         return $this;
     }
     
     /**
-     * @return Storage
+     * @return \{{ Storage.getFullName() }}
      */
     public function getStorage(){
         return $this->storage;

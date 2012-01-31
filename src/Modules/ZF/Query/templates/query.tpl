@@ -14,13 +14,53 @@ use Query\Query;
 
 /**
  * {{ Query }}
+ *
+ * @method {{ Query }} pk() pk(int $primaryKey)
+ * @method {{ Query }} useMemoryCache()
+ * @method {{ Query }} useFileCache()
+ * @method \{{ Collection.getFullName() }} find()
+ * @method \{{ Bean.getFullName() }} findOne()
+ * @method \{{ Bean.getFullName() }} findOneOrElse() findOneOrElse({{ Bean }} $alternative)
+ * @method \{{ Bean.getFullName() }} findOneOrThrow() findOneOrThrow($message)  
+ * @method {{ Query }} create() create(QuoteStrategy $quoteStrategy = null)
+ * @method \Query\Criteria joinOn() joinOn($table, $type = null, $alias = null)
+ * @method {{ Query }} joinUsing() joinUsing($table, $usingColumn, $type = null, $alias = null)
+ * @method \Query\Criteria innerJoinOn() innerJoinOn($table, $alias = null)
+ * @method {{ Query }} innerJoinUsing() innerJoinUsing($table, $usingColumn, $alias = null)
+ * @method \Query\Criteria leftJoinOn() leftJoinOn($table, $alias = null)
+ * @method {{ Query }} leftJoinUsing() leftJoinUsing($table, $usingColumn, $alias = null)
+ * @method \Query\Criteria rigthJoinOn() rigthJoinOn($table, $alias = null)
+ * @method {{ Query }} rigthJoinUsing() rigthJoinUsing($table, $usingColumn, $alias = null)
+ * @method {{ Query }} removeJoins()
+ * @method {{ Query }} removeJoin() removeJoin($table)
+ * @method {{ Query }} from() from($table, $alias = null)
+ * @method {{ Query }} removeFrom() removeFrom($from = null)
+ * @method \Query\Criteria where()
+ * @method \Query\Criteria having()
+ * @method {{ Query }} whereAdd() $column, $value, $comparison = null, $mutatorColumn = null, $mutatorValue = null)
+ * @method {{ Query }} bind() bind($parameters) 
+ * @method {{ Query }} setQuoteStrategy() setQuoteStrategy(QuoteStrategy $quoteStrategy)
+ * @method {{ Query }} page() page($page, $itemsPerPage)
+ * @method {{ Query }} setLimit() setLimit($limit)
+ * @method {{ Query }} setOffset() setOffset($offset)
+ * @method {{ Query }} removeColumn() removeColumn($column = null)
+ * @method {{ Query }} distinct() 
+ * @method {{ Query }} select()
+ * @method {{ Query }} addColumns() addColumns($columns)
+ * @method {{ Query }} addColumn() addColumn($column, $alias = null, $mutator = null)
+ * @method {{ Query }} addGroupBy() addGroupBy($groupBy)
+ * @method {{ Query }} orderBy() orderBy($name, $type = null)
+ * @method {{ Query }} intoOutfile() intoOutfile($filename, $terminated = ',', $enclosed = '"', $escaped = '\\\\', $linesTerminated ='\r\n')
+ * @method {{ Query }} addAscendingOrderBy() addAscendingOrderBy($name)
+ * @method {{ Query }} addDescendingOrderBy() addDescendingOrderBy($name)
+ * @method {{ Query }} setDefaultColumn() setDefaultColumn($defaultColumn)
  */
 class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ BaseQuery }}{% endif %}
 {
 
     /**
-     * (non-PHPdoc)
-     * @see {{ classes.get('BaseQuery') }}::getCatalog()
+     * 
+     * @return \{{ Catalog.getFullName() }}
      */
     protected function getCatalog(){
         return {{ Catalog }}::getInstance();
