@@ -136,6 +136,22 @@ class {{ OptionTest }} extends {{ BaseTest }}
         $this->assertEquals('apple', $option->map($onNull, $onDefined));
         $this->assertEquals('apple', $optionNull->map($onNull, $onDefined));
     }
+    
+    /**
+     * @test
+     */
+    public function nullOnDefined()
+    {
+        $option = new Option(new Fruit('1', 'apple'));
+        $optionNull = new Option(null);
+
+        $onDefined = function(Fruit $fruit){
+            return $fruit->getName();
+        };
+
+        $this->assertEquals('apple', $option->onDefined($onDefined));
+        $this->assertNull($optionNull->onDefined($onDefined));
+    }
 
     /**
      * @test
@@ -157,7 +173,7 @@ class {{ OptionTest }} extends {{ BaseTest }}
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException \UnexpectedValueException
      */
     public function getOrThrowInNull()
     {

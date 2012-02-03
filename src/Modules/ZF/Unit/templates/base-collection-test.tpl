@@ -382,6 +382,54 @@ class {{ BaseCollectionTest }} extends {{ BaseTest }}
         $this->assertTrue($fruits['banana'] instanceOf MyCollection);
         $this->assertEquals(array(2,4), $fruits['banana']->getPrimaryKeys());
     }
+    
+    /**
+     * @test
+     */
+    public function containsAll(){
+        $myCollection = new MyCollection();
+        $myCollection->append(new MyBean(1, 'apple'));
+        $myCollection->append(new MyBean(2, 'banana'));
+        $myCollection->append(new MyBean(3, 'apple'));
+        $myCollection->append(new MyBean(4, 'banana'));
+
+        $this->assertTrue($myCollection->containsAll(array(2, 4)));
+        $this->assertFalse($myCollection->containsAll(array(2, 4, 10)));
+    }
+
+    /**
+     * @test
+     */
+    public function containsAny(){
+        $myCollection = new MyCollection();
+        $myCollection->append(new MyBean(1, 'apple'));
+        $myCollection->append(new MyBean(2, 'banana'));
+        $myCollection->append(new MyBean(3, 'apple'));
+        $myCollection->append(new MyBean(4, 'banana'));
+
+        $this->assertTrue($myCollection->containsAny(array(2, 4)));
+        $this->assertTrue($myCollection->containsAny(array(2, 4, 10)));
+        $this->assertFalse($myCollection->containsAny(array(10, 8, 9)));
+    }
+
+    /**
+     * @test
+     */
+    public function emptyValuesForContains(){
+        $empty = new MyCollection();
+        $emptyArray = array();
+
+        $myCollection = new MyCollection();
+        $myCollection->append(new MyBean(1, 'apple'));
+
+        $this->assertFalse($empty->containsAny(array(1,2,3)));
+        $this->assertFalse($empty->containsAll(array(1,2,3)));
+        $this->assertFalse($myCollection->containsAny($emptyArray));
+        $this->assertFalse($myCollection->containsAll($emptyArray));
+
+        $this->assertFalse($empty->containsAll($emptyArray));
+        $this->assertFalse($empty->containsAny($emptyArray));
+    }
 
     /**
      *

@@ -34,7 +34,7 @@ class {{ Factory }}{% if parent %} extends {{ classes.get(parent.getObject()~'Fa
         parent::populate(${{ bean }}, $fields);
 {% endif %}
         if( !(${{ bean }} instanceof {{ Bean }}) ){
-            throw new {{ Exception }}("El objecto no es un {{ Bean }}");
+            static::throwException("El objecto no es un {{ Bean }}");
         }
 {% for field in fields %}
 
@@ -42,6 +42,13 @@ class {{ Factory }}{% if parent %} extends {{ classes.get(parent.getObject()~'Fa
             ${{ bean }}->{{ field.setter }}($fields['{{ field }}']);
         }        
 {% endfor %}    
+    }
+    
+    /**
+     * @throws {{ Exception }}
+     */
+    protected static function throwException($message){
+        throw new \{{ Exception.getFullName() }}($message);
     }
 
 }

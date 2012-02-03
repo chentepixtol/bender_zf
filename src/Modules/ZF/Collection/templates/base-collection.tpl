@@ -101,6 +101,46 @@ abstract class {{ Collection }} extends \ArrayIterator
     {
         return parent::offsetExists($index);
     }
+    
+    /**
+     *
+     * @param array $array
+     * @return boolean
+     */
+    public function containsAll($ids)
+    {
+        if( $this->isEmpty() || empty($ids) ){
+            return false;
+        }
+
+        $containsAll = true;
+        foreach( $ids as $index ){
+            $containsAll = $containsAll && $this->containsIndex($index);
+            if( false === $containsAll ){
+                break;
+            }
+        }
+        return $containsAll;
+    }
+
+    /**
+     *
+     * @param array $ids
+     * @return boolean
+     */
+    public function containsAny($ids)
+    {
+        if( $this->isEmpty() || empty($ids) ){
+            return false;
+        }
+
+        foreach( $ids as $index ){
+            if( $this->containsIndex($index) ){
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Remove one {{ collectable }} with $name

@@ -5,8 +5,7 @@
 {{ Bean.printUse() }}
 {{ Query.printUse() }}
 {{ Form.printUse() }}
-
-require_once 'lib/controller/BaseController.php';
+use Application\Controller\BaseController;
 
 /**
  *
