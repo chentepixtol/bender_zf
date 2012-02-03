@@ -78,6 +78,7 @@ abstract class {{ AbstractCatalog }} extends {{ TransactionalCatalog }} implemen
         $key = "getByQuery:". $query->createSql();
         if( $storage->exists($key) ){
             $collection = $storage->load($key);
+            $collection->rewind();
         }else{
             $collection = $this->makeCollection();
             foreach( $this->fetchAll($query, $storage) as $row ){

@@ -64,17 +64,23 @@ abstract class {{ BaseQuery }} extends Query
      * @return \{{ classes.get('Collection').getFullName() }}
      */
     public function find(){
-        return $this->getCatalog()->getByQuery($this, $this->storage);
+        return $this->getCatalog()->getByQuery($this, $this->getStorage());
     }
 
     /**
      *
      * @return \{{ classes.get('Bean').getFullName() }}
      */
-    public function findOne()
-    {
-        ${{ classes.get('Bean').getName().toCamelCase() }} = $this->getCatalog()->getOneByQuery($this, $this->getStorage());
-        return ${{ classes.get('Bean').getName().toCamelCase() }};
+    public function findOne(){
+        return $this->getCatalog()->getOneByQuery($this, $this->getStorage());
+    }
+    
+    /**
+     * @param mixed $pk
+     * @return \{{ classes.get('Bean').getFullName() }}
+     */
+    public function findByPK($pk){
+        return $this->pk($pk)->findOne();
     }
     
     /**
@@ -107,6 +113,33 @@ abstract class {{ BaseQuery }} extends Query
      */
     public function findOneOrThrow($message){
         return $this->findOneOption()->getOrThrow($message);
+    }
+    
+    /**
+     * @param mixed $pk
+     * @return \{{ Option.getFullName() }}
+     */
+    public function findOptionByPK($pk){
+        return $this->pk($pk)->findOneOption();
+    }
+    
+    /**
+     * @param mixed $pk
+     * @param mixed $alternative
+     * @return \{{ classes.get('Bean').getFullName() }}
+     */
+    public function findByPKOrElse($pk, $alternative){
+        return $this->findOptionByPK($pk)->getOrElse($alternative);
+    }
+    
+    /**
+     * @param mixed $pk
+     * @param mixed $message
+     * @return \{{ classes.get('Bean').getFullName() }}
+     * @throws \UnexpectedValueException
+     */
+    public function findByPKOrThrow($pk, $message){
+        return $this->findOptionByPK($pk)->getOrThrow($message);
     }
 
     /**

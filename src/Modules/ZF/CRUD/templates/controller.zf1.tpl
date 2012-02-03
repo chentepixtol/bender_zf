@@ -65,8 +65,7 @@ class {{ Controller }} extends BaseController
     public function editAction()
     {
         $id = $this->getRequest()->getParam('id');
-        ${{ bean }} = {{ Query }}::create()->pk($id)
-            ->findOneOrThrow("No existe el {{ Bean }} con Id {$id}");
+        ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, "No existe el {{ Bean }} con Id {$id}");
 
         $url = $this->getRequest()->getBaseUrl() . '/{{ slug }}/update/id/' . $id;
         $form = $this->getForm()
@@ -116,8 +115,7 @@ class {{ Controller }} extends BaseController
             }
 
             $id = $this->getRequest()->getParam('id');
-            ${{ bean }} = {{ Query }}::create()->pk($id)
-                ->findOneOrThrow("No existe el {{ Bean }} con id {$id}");
+            ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, "No existe el {{ Bean }} con Id {$id}");
 
             {{ Factory }}::populate(${{ bean }}, $form->getValues());
             {{ Catalog }}::getInstance()->update(${{ bean }});
