@@ -1,8 +1,6 @@
-
 {% set slug = Controller.getName().toSlug('newString').replace('-controller','') %}
-{block name=main}
 
-    {$form}
+    {$form->render()}
     
     <table class="zebra-striped bordered-table">
         <caption><h3>{{ Bean }}</h3></caption>
@@ -27,6 +25,5 @@
     </table>
     
     
-    {include file='layout/Pager.tpl' paginator=$paginator}
+{include file='layout/Pager.tpl' paginator=$paginator}
     
-{/block}

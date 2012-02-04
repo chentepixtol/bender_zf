@@ -27,7 +27,7 @@ class {{ FileStorage }} implements {{ Storage }}
      * @var array
      */
     private $defaultBackendOptions = array(
-        'cache_dir' => '../cache/',
+        'cache_dir' => 'cache/storage',
     );
     
     /**
@@ -38,6 +38,9 @@ class {{ FileStorage }} implements {{ Storage }}
     {
         $frontendOptions = array_merge($this->defaultFrontendOptions, $frontendOptions); 
         $backendOptions = array_merge($this->defaultBackendOptions, $backendOptions);
+        if( !is_dir($backendOptions['cache_dir']) ){
+            @mkdir($backendOptions['cache_dir'], 0777, true);
+        }
         $this->zendCache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }
 

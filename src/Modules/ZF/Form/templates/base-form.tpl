@@ -15,7 +15,7 @@ use Zend_View as ZendView;
  * @author chente
  *
  */
-class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\Zend_Form{% endif %}
+class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\ZFriendly\Form\Twitter{% endif %}
 {
 
     /**

@@ -89,6 +89,7 @@ class {{ Controller }} extends BaseController
            if( !$form->isValid($params) ){
                $this->view->setTpl("New");
                $this->view->form = $form;
+               return;
            }
 
            ${{ bean }} = {{ Factory }}::createFromArray($form->getValues());
@@ -112,6 +113,7 @@ class {{ Controller }} extends BaseController
             if( !$form->isValid($params) ){
                 $this->view->setTpl("New");
                 $this->view->form = $form;
+                return;
             }
 
             $id = $this->getRequest()->getParam('id');
@@ -135,7 +137,7 @@ class {{ Controller }} extends BaseController
         $submit = new Zend_Form_Element_Submit("send");
         $submit->setLabel("Guardar");
         $form->addElement($submit)->setMethod('post');
-        //$form->twitterDecorators();
+        $form->twitterDecorators();
         return $form;
     }
     
@@ -149,7 +151,7 @@ class {{ Controller }} extends BaseController
         $submit = new Zend_Form_Element_Submit("send");
         $submit->setLabel("Buscar");
         $form->addElement($submit)->setMethod('post');
-        //$form->twitterDecorators();
+        $form->twitterDecorators();
         return $form;
     }
 

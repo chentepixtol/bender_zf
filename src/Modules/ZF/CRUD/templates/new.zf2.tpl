@@ -1,1 +1,1 @@
-{block name=main}{$form}{/block}
+{$form->render()}

@@ -9,7 +9,7 @@
 use Zend\Form\Element;
 {% set ElementText = 'Element\\Text' %}
 {% else %}
-use Zend_Form_Element_Text as ElementText;
+use \Zend_Form_Element_Text as ElementText;
 {% set ElementText = 'ElementText' %}
 {% endif %}
 
