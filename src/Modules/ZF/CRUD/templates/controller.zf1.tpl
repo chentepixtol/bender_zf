@@ -5,13 +5,13 @@
 {{ Bean.printUse() }}
 {{ Query.printUse() }}
 {{ Form.printUse() }}
-use Application\Controller\BaseController;
+use Application\Controller\CrudController;
 
 /**
  *
  * @author chente
  */
-class {{ Controller }} extends BaseController
+class {{ Controller }} extends CrudController
 {
 
     /**
@@ -34,18 +34,14 @@ class {{ Controller }} extends BaseController
         if( $this->getRequest()->isPost() ){
             $form->populate($this->getRequest()->getParams());
         }
-        $total = {{ Query }}::create()->filter($form->getValues())->count();
         
-        $maxPerPage = 5;
-        $paginator = Zend_Paginator::factory($total);
-        $paginator->setItemCountPerPage($maxPerPage);
-        $paginator->setCurrentPageNumber($page);
-
+        $total = {{ Query }}::create()->filter($form->getValues())->count();
         ${{ collection }} = {{ Query }}::create()
             ->filter($form->getValues())
-            ->page($page, $maxPerPage)->find();
+            ->page($page, $this->getMaxPerPage())->find();
+            
         $this->view->{{ collection }} = ${{ collection }};
-        $this->view->paginator = $paginator;
+        $this->view->paginator = $this->createPaginator($total, $page);
     }
 
     /**
@@ -54,7 +50,7 @@ class {{ Controller }} extends BaseController
      */
     public function newAction()
     {
-        $url = $this->getRequest()->getBaseUrl() . '/{{ slug }}/create'; 
+        $url = $this->generateUrl('{{ slug }}', 'create'); 
         $this->view->form = $this->getForm()->setAction($url);
     }
 
@@ -67,7 +63,7 @@ class {{ Controller }} extends BaseController
         $id = $this->getRequest()->getParam('id');
         ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, "No existe el {{ Bean }} con Id {$id}");
 
-        $url = $this->getRequest()->getBaseUrl() . '/{{ slug }}/update/id/' . $id;
+        $url = $this->generateUrl('{{ slug }}', 'update', compact('id'));
         $form = $this->getForm()
             ->populate(${{ bean }}->toArray())
             ->setAction($url);
@@ -125,6 +121,12 @@ class {{ Controller }} extends BaseController
             $this->setFlash('ok', "Se actualizo correctamente el {{ Bean}}");
         }
         $this->_redirect('{{ slug }}/list');
+    }
+    
+    /**
+     *
+     */
+    public function deleteAction(){
     }
 
     /**
