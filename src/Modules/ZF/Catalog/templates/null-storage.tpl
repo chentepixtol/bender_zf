@@ -31,5 +31,15 @@ class {{ NullStorage }} implements {{ Storage }}
     public function exists($key){
         return false;
     }
+    
+    /**
+     * Delete cache
+     */
+    public function removeAll(){}
+    
+    /**
+     *
+     */
+    public function remove($key){}
 
 }

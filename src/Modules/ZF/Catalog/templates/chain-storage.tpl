@@ -71,4 +71,20 @@ class {{ ChainStorage }} implements {{ Storage }}
         $this->secondaryStorage->exists($key);
     }
     
+    /**
+     * Delete cache
+     */
+    public function removeAll(){
+        $this->primaryStorage->removeAll();
+        $this->secondaryStorage->removeAll();
+    }
+    
+    /**
+     *
+     */
+    public function remove($key){
+        $this->primaryStorage->remove($key);
+        $this->secondaryStorage->remove($key);
+    }
+    
 }

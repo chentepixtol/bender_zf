@@ -71,4 +71,18 @@ class {{ FileStorage }} implements {{ Storage }}
         return $this->zendCache->load(sha1($key)) !== false;
     }
     
+    /**
+     * Delete cache
+     */
+    public function removeAll(){
+        $this->zendCache->clean(\Zend_Cache::CLEANING_MODE_ALL);
+    }
+    
+    /**
+     *
+     */
+    public function remove($key){
+        $this->zendCache->remove(sha1($key));
+    }
+    
 }

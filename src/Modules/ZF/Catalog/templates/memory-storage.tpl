@@ -43,4 +43,18 @@ class {{ MemoryStorage }} implements {{ Storage }}
         return array_key_exists($key, self::$cache);
     }
     
+    /**
+     * Delete cache
+     */
+    public function removeAll(){
+        self::$cache = array();
+    }
+    
+    /**
+     *
+     */
+    public function remove($key){
+        unset(self::$cache[$key]);
+    }
+    
 }

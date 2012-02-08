@@ -26,5 +26,15 @@ interface {{ Storage }}
      * @return boolean
      */
     public function exists($key);
+    
+    /**
+     * Delete cache
+     */
+    public function removeAll();
+    
+    /**
+     *
+     */
+    public function remove($key);
 
 }
