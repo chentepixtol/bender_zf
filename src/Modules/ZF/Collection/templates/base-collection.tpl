@@ -356,7 +356,7 @@ abstract class {{ Collection }} extends \ArrayIterator
      * @param array $collections
      * @return \Closure
      */
-    private function collectionGenerator(array $collections){
+    private function collectionGenerator(array & $collections){
         $self = $this;
         $getCollection = function($index) use(&$collections, $self){
             if( !isset($collections[$index]) ){
