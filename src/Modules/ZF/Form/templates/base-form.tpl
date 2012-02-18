@@ -19,12 +19,12 @@ class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\ZFriendly\Form\
 {
 
     /**
-     * @var {{ classes.get('BaseValidator') }} $validator
+     * @var \{{ classes.get('BaseValidator').getFullName() }} $validator
      */
     protected $validator;
     
     /**
-     * @var {{ classes.get('BaseFilter') }} $filter
+     * @var \{{ classes.get('BaseFilter').getFullName() }} $filter
      */
     protected $filter;
     
