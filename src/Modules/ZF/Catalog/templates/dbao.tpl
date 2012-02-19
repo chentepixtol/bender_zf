@@ -13,45 +13,27 @@ class DBAO
 {
 
     /**
-     * @var mixed
-     */
-    public static $config = null;
-
-    /**
 {%if isZF2 %}
      * @var \Zend\Db\Adapter\AbstractAdapter
 {% else %}
      * @var \Zend_Db_Adapter_Abstract
 {% endif %}
      */
-    protected static $dbAdapter  = null;
-    
+    protected $dbAdapter  = null;
+
     /**
      * @param Config
      */
     public function __construct($dbConfig){
-        self::$config = $dbConfig;
+        $this->dbAdapter = ZendDb::factory($dbConfig->database);
     }
 
     /**
      * Metodo para obtener la Connection
-{%if isZF2 %}
-     * @return \Zend\Db\Adapter\AbstractAdapter
-{% else %}
      * @return \Zend_Db_Adapter_Abstract
-{% endif %}
      */
-    public static function getDbAdapter()
-    {
-        if( self::$config === null ){
-            throw new \Exception("No se ha configurado el parametro estatico de la base de datos");
-        }
-
-        if ( !isset(self::$dbAdapter) ){
-            self::$dbAdapter = ZendDb::factory(self::$config);
-        }
-
-        return self::$dbAdapter;
+    public function getDbAdapter(){
+        return $this->dbAdapter;
     }
     
 }

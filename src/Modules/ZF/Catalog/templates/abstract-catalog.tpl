@@ -5,8 +5,8 @@
 {% set BaseCollection = classes.get('Collection') %}
 {% set FactoryStorage = classes.get('FactoryStorage') %}
 {% set Storage = classes.get('Storage') %}
+{% set DBAO = classes.get('DBAO') %}
 {% set Bean = classes.get('Bean') %}
-{% set TransactionalCatalog = classes.get('TransactionalCatalog') %}
 {% set bean = Bean.getName().toCamelCase() %}
 {{ AbstractCatalog.printNamespace() }}
 
@@ -17,7 +17,7 @@
 use Query\Query;
 
 {% include "header_class.tpl" with {'infoClass': AbstractCatalog} %}
-abstract class {{ AbstractCatalog }} extends {{ TransactionalCatalog }} implements {{ Catalog }}
+abstract class {{ AbstractCatalog }} implements {{ Catalog }}
 {
 
     /**
@@ -63,6 +63,91 @@ abstract class {{ AbstractCatalog }} extends {{ TransactionalCatalog }} implemen
      */
     public function isNotNull($field){
         return !is_null($field);
+    }
+    
+    /**
+     * Engines
+     * @var array
+     */
+    protected static $engines = array("pgsql", "mysql");
+    
+    /**
+    
+    private $dbao;
+
+    /**
+     * The current transaction level
+     */
+    protected static $transLevel = 0;
+
+    /**
+     *
+{%if isZF2 %}
+     * @return \Zend\Db\Adapter\AbstractAdapter
+{% else %}
+     * @return \Zend_Db_Adapter_Abstract
+{% endif %}
+     */
+    public function getDb(){
+        return $this->dbao->getDbAdapter();
+    }
+    
+    /**
+     * @param \Application\Database\DBAO $dbao
+     */
+    public function setDBAO(\Application\Database\DBAO $dbao){
+        $this->dbao = $dbao;
+    }
+
+    /**
+     * Soporta transacciones nested
+     * @return array
+     */
+    protected function isNestable()
+    {
+        $engineName = $this->getDb()->getConnection()->getAttribute(\PDO::ATTR_DRIVER_NAME); 
+        return in_array($engineName, self::$engines);
+    }
+
+    /**
+     * beginTransaction
+     */
+    public function beginTransaction()
+    {
+        if( !$this->isNestable() || self::$transLevel == 0 ){
+            $this->getDb()->beginTransaction();
+        }else{
+            $this->getDb()->exec("SAVEPOINT LEVEL".self::$transLevel);
+        }
+        self::$transLevel++;
+    }
+
+    /**
+     * commit
+     */
+    public function commit()
+    {
+        self::$transLevel--;
+
+        if( !$this->isNestable() || self::$transLevel == 0 ){
+            $this->getDb()->commit();
+        }else{
+            $this->getDb()->exec("RELEASE SAVEPOINT LEVEL".self::$transLevel);
+        }
+    }
+
+    /**
+     * rollBack
+     */
+    public function rollBack()
+    {
+        self::$transLevel--;
+
+        if( !$this->isNestable() || self::$transLevel == 0 ){
+            $this->getDb()->rollBack();
+        }else{
+            $this->getDb()->exec("ROLLBACK TO SAVEPOINT LEVEL".self::$transLevel);
+        }
     }
 
     /**

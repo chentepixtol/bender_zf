@@ -71,6 +71,11 @@ class Catalog extends BaseModule
             );
         }
 
+        $tables->rewind();
+        $view = $this->getView();
+        $view->assign('tables', $tables);
+        $files->append(new File('data/controllers.xml', $view->fetch('services.tpl')));
+
         return $files;
     }
 
@@ -84,9 +89,6 @@ class Catalog extends BaseModule
             'Catalog' => array(
                 'route' => $ns.'Model/Catalog/Catalog.php',
                 'template' => 'catalog-interface.tpl',
-            ),'TransactionalCatalog' => array(
-                'route' => $ns.'Model/Catalog/TransactionalCatalog.php',
-                'template' => 'transactional-catalog.tpl',
             ),'Storage' => array(
                 'route' => $ns.'Storage/Storage.php',
                 'template' => 'storage-interface.tpl',

@@ -14,12 +14,6 @@ interface {{ Catalog }}
 {
 
     /**
-     * Singleton
-     * @return {{ Catalog }}
-     */
-    public static function getInstance();
-
-    /**
      * beginTransaction
      */
     public function beginTransaction();

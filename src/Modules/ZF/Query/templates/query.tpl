@@ -66,7 +66,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
      * @return \{{ Catalog.getFullName() }}
      */
     protected function getCatalog(){
-        return {{ Catalog }}::getInstance();
+        return \Zend_Registry::getInstance()->get('container')->get('{{ Catalog }}');
     }
 
     /**

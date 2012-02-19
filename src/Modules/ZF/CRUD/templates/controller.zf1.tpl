@@ -89,7 +89,7 @@ class {{ Controller }} extends CrudController
            }
 
            ${{ bean }} = {{ Factory }}::createFromArray($form->getValues());
-           {{ Catalog }}::getInstance()->create(${{ bean }});
+           $this->getContainer()->get('{{ Catalog }}')->create(${{ bean }});
 
            $this->setFlash('ok', "Se ha guardado correctamente el {{ User }}");
         }
@@ -116,7 +116,7 @@ class {{ Controller }} extends CrudController
             ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, "No existe el {{ Bean }} con Id {$id}");
 
             {{ Factory }}::populate(${{ bean }}, $form->getValues());
-            {{ Catalog }}::getInstance()->update(${{ bean }});
+            $this->getContainer()->get('{{ Catalog }}')->update(${{ bean }});
 
             $this->setFlash('ok', "Se actualizo correctamente el {{ Bean}}");
         }

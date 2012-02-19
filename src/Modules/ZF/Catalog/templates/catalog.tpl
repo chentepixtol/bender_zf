@@ -19,7 +19,6 @@ use Query\Query;
  *
  * @package {{ Catalog.getNamespace() }}
  * @author {{ meta.get('author') }}
- * @method \{{ Catalog.getFullName() }} getInstance() 
  * @method \{{ Bean.getFullName() }} getOneByQuery() getOneByQuery(Query $query, {{ classes.get('Storage') }} $storage = null)
  * @method \{{ Collection.getFullName() }} getByQuery() getByQuery(Query $query, {{ classes.get('Storage') }} $storage = null)
  */
