@@ -5,9 +5,6 @@ namespace Test\Unit;
 
 {{ Query.printUse() }}
 
-{{ BaseTest.printRequire(true) }}
-{{ Query.printRequire() }}
-
 class {{ Bean }}QueryTest extends {{ BaseTest }}
 {
 

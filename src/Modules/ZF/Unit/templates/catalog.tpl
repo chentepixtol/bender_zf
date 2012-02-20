@@ -2,7 +2,6 @@
 {% set BaseTest = classes.get('BaseTest') %}
 
 namespace Test\Unit;
-{{ BaseTest.printRequire(true) }}
 
 {{ Catalog.printUse() }}
 
@@ -12,9 +11,9 @@ class {{ Catalog }}Test extends {{ BaseTest }}
     /**
      * @test
      */
-    public function singleton()
+    public function main()
     {
-        $this->assertTrue({{ Catalog }}::getInstance() instanceOf {{ Catalog }});
+        $this->assertTrue(true);
     }
 
 }

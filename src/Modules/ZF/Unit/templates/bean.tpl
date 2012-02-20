@@ -4,7 +4,6 @@
 {% set Collectable = classes.get('Collectable') %}
 
 namespace Test\Unit;
-{{ BaseTest.printRequire(true) }}
 
 {{ Bean.printUse() }}
 

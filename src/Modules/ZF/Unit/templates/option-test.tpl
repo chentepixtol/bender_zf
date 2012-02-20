@@ -4,7 +4,6 @@
 {% set Option = classes.get('Option') %}
 namespace Test\Unit;
 
-{{ BaseTest.printRequire(true) }}
 {{ Option.printUse() }}
 
 class Fruit{

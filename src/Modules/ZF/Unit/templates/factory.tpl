@@ -2,7 +2,6 @@
 {% set BaseTest = classes.get('BaseTest') %}
 
 namespace Test\Unit;
-{{ BaseTest.printRequire(true) }}
 
 {{ Factory.printUse() }}
 
