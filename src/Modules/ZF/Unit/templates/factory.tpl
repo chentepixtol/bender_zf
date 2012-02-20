@@ -19,6 +19,20 @@ class {{ Factory }}Test extends {{ BaseTest }}
             $this->assertTrue(true);
         }
     }
+{% if parent %}
+{% set parentClass = classes.get(parent.getObject().toString()) %}
+	/**
+     * @test
+     */
+    public function populate{{ parentClass }}(){
+        try {
+            {{ Factory }}::populate(new \{{ parentClass.getFullname() }}(), array());
+            $this->fail("Debio de mandar una exception");
+        } catch ( \{{ Exception.getFullName() }} $e) {
+            $this->assertTrue(true);
+        }
+    }
+{% endif %}    
 
     /**
      * @test
