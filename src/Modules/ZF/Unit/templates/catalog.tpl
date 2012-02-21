@@ -56,6 +56,46 @@ class {{ Catalog }}Test extends {{ BaseTest }}
     /**
      * @test
      */
+    public function getOneByQuery()
+    {
+        ${{ catalog }} = new {{ Catalog }}();
+
+        $dbAdapter = new \Zend_Test_DbAdapter();
+        ${{ catalog }}->setDBAO($this->getDBAOMockup($dbAdapter));
+
+        $row = array_merge(array('{{ primaryKey }}' => 999), $this->getColumns());
+        $stmt1 = \Zend_Test_DbStatement::createSelectStatement(array($row));
+        $dbAdapter->appendStatementToStack($stmt1);
+
+        ${{ bean }} = ${{ catalog }}->getOneByQuery(\{{ Query.getFullname() }}::create());
+        $this->assertTrue(${{ bean }} instanceOf \{{ Bean.getFullname() }} );
+        $this->assertEquals($row, ${{ bean }}->toArrayFor(array_keys($row)) );
+    }
+    
+    /**
+     * @test
+     */
+    public function getByQuery()
+    {
+        ${{ catalog }} = new {{ Catalog }}();
+
+        $dbAdapter = new \Zend_Test_DbAdapter();
+        ${{ catalog }}->setDBAO($this->getDBAOMockup($dbAdapter));
+
+        $row999 = array_merge(array('{{ primaryKey }}' => 999), $this->getColumns());
+        $row555 = array_merge(array('{{ primaryKey }}' => 555), $this->getColumns());
+        $stmt1 = \Zend_Test_DbStatement::createSelectStatement(array($row999, $row555));
+        $dbAdapter->appendStatementToStack($stmt1);
+
+        ${{ collection }} = ${{ catalog }}->getByQuery(\{{ Query.getFullname() }}::create());
+        $this->assertTrue(${{ collection }} instanceOf \{{ Collection.getFullname() }} );
+        $this->assertEquals(2, ${{ collection }}->count());
+        $this->assertEquals(array(999, 555), ${{ collection }}->getPrimaryKeys());
+    }
+    
+    /**
+     * @test
+     */
     public function invalidArgument(){
         ${{ catalog }} = new {{ Catalog }}();
 
@@ -64,6 +104,13 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         
         try{
             ${{ catalog }}->create(new \stdClass());
+            $this->fail("Se deberia de lanzar una exception");
+        }catch(\{{ Exception.getFullname() }} $e){
+            $this->assertTrue(true);
+        }
+        
+        try{
+            ${{ catalog }}->update(new \stdClass());
             $this->fail("Se deberia de lanzar una exception");
         }catch(\{{ Exception.getFullname() }} $e){
             $this->assertTrue(true);
