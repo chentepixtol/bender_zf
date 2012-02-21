@@ -34,7 +34,7 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
      * @param {{ Bean }} ${{ bean }}
      * @throws Exception
      */
-    abstract protected function validateBean({{ Bean }} ${{ bean }} = null);
+    abstract protected function validateBean(${{ bean }} = null);
 
     /**
      *

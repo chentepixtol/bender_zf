@@ -217,7 +217,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
      * @param {{ Bean }} ${{ bean }}
      * @throws Exception
      */
-    protected function validateBean({{ BaseBean }} ${{ bean }} = null){
+    protected function validateBean(${{ bean }} = null){
         if( !(${{ bean }} instanceof {{ Bean }}) ){
             $this->throwException("passed parameter isn't a {{ Bean }} instance");
         }

@@ -333,7 +333,7 @@ abstract class {{ Collection }} extends \ArrayIterator
         $this->validateCallback($callable);
 
         $collections = array();
-        $getCollection = $this->collectionGenerator(&$collections);
+        $getCollection = $this->collectionGenerator($collections);
         $this->each(function(Collectable $collectable) use($getCollection, $callable){
             $getCollection($callable($collectable))->append($collectable);
         });
