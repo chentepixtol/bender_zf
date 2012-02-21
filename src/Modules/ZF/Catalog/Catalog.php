@@ -101,6 +101,9 @@ class Catalog extends BaseModule
             ),'DBAO' => array(
                 'route' => $ns.'Database/DBAO.php',
                 'template' => 'dbao.tpl',
+            ),'DBAOFromConfig' => array(
+                'route' => $ns.'Database/DBAOFromConfig.php',
+                'template' => 'dbao-from-config.tpl',
             ),'Singleton' => array(
                 'route' => $ns.'Base/Singleton.php',
                 'template' => 'singleton.tpl',
