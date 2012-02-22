@@ -41,8 +41,10 @@ abstract class BaseModule extends AbstractModule
         $this->getView()->globalOptions = $globalOptions = $this->getBender()->getSettings()->get('options', new Configuration());
         $this->getView()->meta = $globalOptions->get('meta', new Configuration());
 
-        $sufixes = array('Collection', 'Factory', 'Catalog', 'Exception',
-                         'Query', 'Form', 'Validator', 'Filter', 'Controller');
+        $sufixes = array(
+            'Collection', 'Factory', 'Catalog', 'Exception', 'Query',
+            'Form', 'Validator', 'Filter', 'Controller', 'Service',
+        );
         foreach( $sufixes as $suffix ){
             $this->addShorcutBySuffix($table, $suffix);
         }

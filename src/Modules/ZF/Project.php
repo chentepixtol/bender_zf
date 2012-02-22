@@ -2,6 +2,8 @@
 
 namespace Modules\ZF;
 
+use Modules\ZF\Service\Service;
+
 use Application\Generator\Module\ModuleCollection;
 use Application\Generator\ProjectInterface;
 use Modules\ZF\Unit\Unit;
@@ -43,6 +45,7 @@ class Project implements ProjectInterface
             new Form(),
             new Query(),
             new Unit(),
+            new Service(),
         ));
     }
 
