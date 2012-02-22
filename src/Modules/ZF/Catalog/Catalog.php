@@ -74,7 +74,7 @@ class Catalog extends BaseModule
         $tables->rewind();
         $view = $this->getView();
         $view->assign('tables', $tables);
-        $files->append(new File('data/controllers.xml', $view->fetch('services.tpl')));
+        $files->append(new File('data/CatalogServices.xml', $view->fetch('services.tpl')));
 
         return $files;
     }
