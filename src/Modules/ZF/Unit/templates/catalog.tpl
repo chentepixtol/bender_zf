@@ -67,7 +67,7 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         $stmt1 = \Zend_Test_DbStatement::createSelectStatement(array($row));
         $dbAdapter->appendStatementToStack($stmt1);
 
-        ${{ bean }} = ${{ catalog }}->getOneByQuery(\{{ Query.getFullname() }}::create());
+        ${{ bean }} = ${{ catalog }}->getOneByQuery($this->getEmptyQuery());
         $this->assertTrue(${{ bean }} instanceOf \{{ Bean.getFullname() }} );
         $this->assertEquals($row, ${{ bean }}->toArrayFor(array_keys($row)) );
     }
@@ -77,20 +77,62 @@ class {{ Catalog }}Test extends {{ BaseTest }}
      */
     public function getByQuery()
     {
-        ${{ catalog }} = new {{ Catalog }}();
+        ${{ catalog }} = $this->getCatalogWithMultipleRows($this->getRows());
 
-        $dbAdapter = new \Zend_Test_DbAdapter();
-        ${{ catalog }}->setDBAO($this->getDBAOMockup($dbAdapter));
-
-        $row999 = array_merge(array('{{ primaryKey }}' => 999), $this->getColumns());
-        $row555 = array_merge(array('{{ primaryKey }}' => 555), $this->getColumns());
-        $stmt1 = \Zend_Test_DbStatement::createSelectStatement(array($row999, $row555));
-        $dbAdapter->appendStatementToStack($stmt1);
-
-        ${{ collection }} = ${{ catalog }}->getByQuery(\{{ Query.getFullname() }}::create());
+        ${{ collection }} = ${{ catalog }}->getByQuery($this->getEmptyQuery());
         $this->assertTrue(${{ collection }} instanceOf \{{ Collection.getFullname() }} );
         $this->assertEquals(2, ${{ collection }}->count());
         $this->assertEquals(array(999, 555), ${{ collection }}->getPrimaryKeys());
+    }
+    
+    /**
+     * @test
+     */
+    public function fetchAll()
+    {
+        ${{ catalog }} = $this->getCatalogWithMultipleRows($this->getRows());
+        
+        $resultSet = ${{ catalog }}->fetchAll($this->getEmptyQuery());
+        $this->assertTrue(is_array($resultSet));
+        $this->assertEquals(2 , count($resultSet));
+        $this->assertEquals($this->getRows(), $resultSet);
+    }
+    
+    /**
+     * @test
+     */
+    public function fetchCol()
+    {
+        ${{ catalog }} = $this->getCatalogWithMultipleRows( array(999, 555) );
+        
+        $resultSet = ${{ catalog }}->fetchCol($this->getEmptyQuery());
+        $this->assertTrue(is_array($resultSet));
+        $this->assertEquals(2 , count($resultSet));
+        $this->assertEquals(array(999, 555), $resultSet);
+    }
+    
+    /**
+     * @test
+     */
+    public function fetchOne()
+    {
+        ${{ catalog }} = $this->getCatalogWithMultipleRows( array(array(999)) );
+
+        $resultSet = ${{ catalog }}->fetchOne($this->getEmptyQuery());
+        $this->assertEquals(999, $resultSet);
+    }
+
+    /**
+     * @test
+     */
+    public function fetchPairs()
+    {
+        ${{ catalog }} = $this->getCatalogWithMultipleRows( array(array(999, 'value'), array(555, 'value') ));
+
+        $resultSet = ${{ catalog }}->fetchPairs($this->getEmptyQuery());
+        $this->assertTrue(is_array($resultSet));
+        $this->assertEquals(2 , count($resultSet));
+        $this->assertEquals(array(999 => 'value', 555 => 'value'), $resultSet);
     }
     
     /**
@@ -115,6 +157,39 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         }catch(\{{ Exception.getFullname() }} $e){
             $this->assertTrue(true);
         }
+    }
+    
+    /**
+     * @return {{ Catalog }}
+     */
+    private function getCatalogWithMultipleRows($rows){
+        ${{ catalog }} = new {{ Catalog }}();
+
+        $dbAdapter = new \Zend_Test_DbAdapter();
+        ${{ catalog }}->setDBAO($this->getDBAOMockup($dbAdapter));
+
+        $stmt1 = \Zend_Test_DbStatement::createSelectStatement($rows);
+        $dbAdapter->appendStatementToStack($stmt1);
+        
+        return ${{ catalog }};
+    }
+    
+    /**
+     * @return array
+     */
+    private function getRows(){
+        $row999 = array_merge(array('{{ primaryKey }}' => 999), $this->getColumns());
+        $row555 = array_merge(array('{{ primaryKey }}' => 555), $this->getColumns());
+        $rows = array($row999, $row555);
+        
+        return $rows;
+    }
+    
+    /**
+     * @return {{ Query.getFullname() }}
+     */
+    private function getEmptyQuery(){
+        return \{{ Query.getFullname() }}::create();
     }
     
     /**
