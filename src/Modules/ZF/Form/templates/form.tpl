@@ -19,7 +19,7 @@ use \Zend_Form_Element_Text as ElementText;
  * @author chente
  *
  */
-class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form') }}{% else %}{{ BaseForm }}{% endif %}  
+class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form') }}{% else %}{{ BaseForm }}{% endif %} 
 {
 
     /**
@@ -30,14 +30,14 @@ class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form'
         parent::init();
         $this->validator = new {{ Validator }}();
         $this->filter = new {{ Filter }}();
-                
+
 {% for field in fields.nonPrimaryKeys() %}
 {% if field.getName().toString() != parentPrimaryKey.getName().toString() %}
         $this->init{{ field.getName().toUpperCamelCase() }}Element();
 {% endif %}
 {% endfor %}
     }
-        
+
 {% for field in fields.nonPrimaryKeys() %}{% if field.getName().toString() != parentPrimaryKey.getName().toString() %}
 
     /**
@@ -45,13 +45,20 @@ class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form'
      */
     protected function init{{ field.getName().toUpperCamelCase() }}Element()
     {
+{% if fields.inForeignKeys.containsIndex(field.getName().toString()) %}
+{% set foreignKey = foreignKeys.getByColumnName(field.getName().toString()) %}
+        $element = new \Zend_Form_Element_Select('{{ field.getName().toUnderscore() }}');
+        $options = \{{ classes.get(foreignKey.getForeignTable.getObject() ~ 'Query').getFullname() }}::create()->find()->toCombo();
+        $element->addMultiOptions($options);
+{% else %}
         $element = new {{ ElementText }}('{{ field.getName().toUnderscore() }}');
+{% endif %}
         $element->setLabel('{{ field.getName().toUpperCamelCase() }}');
         $element->addValidator($this->validator->getFor('{{ field.getName() }}'));
         $element->addFilter($this->filter->getFor('{{ field }}'));
 {% if field.isRequired %}
         $element->setRequired(true);
-{% endif %}            
+{% endif %}
         $this->addElement($element);
         $this->elements['{{ field.getName().toUnderscore() }}'] = $element;
     }

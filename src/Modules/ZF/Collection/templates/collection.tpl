@@ -2,6 +2,7 @@
 {{ Collection.printNamespace() }}
 
 {% if Collection.getNamespace != classes.get('Collection').getNamespace() %}{{ classes.get('Collection').printUse() }}{% endif %}
+{{ Bean.printUse() }}
 
 /**
  *
@@ -20,5 +21,17 @@
  */
 class {{ Collection }} extends {{ classes.get('Collection') }}
 {
+
+{% if fields.hasColumnName('/name/i') %}
+    /**
+     * @return array
+     */
+{% set fieldName = fields.getByColumnName('/name/i') %}
+	public function toCombo(){
+		return $this->map(function({{ Bean }} ${{ bean }}){
+			return array( ${{ bean }}->{{ primaryKey.getter }}() => ${{ bean }}->{{ fieldName.getter }}()  );
+		});
+	}
+{% endif %}
 
 }
