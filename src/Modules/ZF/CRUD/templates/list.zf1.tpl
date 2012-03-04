@@ -9,11 +9,11 @@
 {% for field in fullFields %}
                 <th>{$i18n->_('{{ field.getName().toUpperCamelCase() }}')}</th>
 {% endfor %}
-                <th>{$i18n->_('Actions')}</th>
+                <th colspan="2">{$i18n->_('Actions')}</th>
             </tr>
         </thead>
         <tbody>
-            {foreach ${{ collection }} as ${{ bean }}}
+            {foreach ${{ Bean.getName().pluralize() }} as ${{ bean }}}
                 <tr>
 {% set inForeignKeys = fullFields.inForeignKeys %}
 {% for field in fullFields %}
@@ -24,7 +24,8 @@
                     <td>{${{ bean}}->{{ field.getter() }}()}</td>
 {% endif %}
 {% endfor %}
-                    <td><a href="{$baseUrl}/{{slug}}/edit/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Editar')}</a></td>
+                    <td><a href="{$baseUrl}/{{slug}}/edit/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Edit')}</a></td>
+                    <td><a href="{$baseUrl}/{{slug}}/delete/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Delete')}</a></td>
                 </tr>
             {/foreach}
         </tbody>

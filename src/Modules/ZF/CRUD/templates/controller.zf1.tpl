@@ -36,11 +36,11 @@ class {{ Controller }} extends CrudController
         }
         
         $total = {{ Query }}::create()->filter($form->getValues())->count();
-        ${{ collection }} = {{ Query }}::create()
+        $this->view->{{ Bean.getName().pluralize() }} = ${{ Bean.getName().pluralize() }} = {{ Query }}::create()
             ->filter($form->getValues())
-            ->page($page, $this->getMaxPerPage())->find();
+            ->page($page, $this->getMaxPerPage())
+            ->find();
             
-        $this->view->{{ collection }} = ${{ collection }};
         $this->view->paginator = $this->createPaginator($total, $page);
 {% for foreignKey in foreignKeys %}
 {% set classForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()) %}
@@ -66,7 +66,7 @@ class {{ Controller }} extends CrudController
     public function editAction()
     {
         $id = $this->getRequest()->getParam('id');
-        ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, "No existe el {{ Bean }} con Id {$id}");
+        ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
 
         $url = $this->generateUrl('{{ slug }}', 'update', compact('id'));
         $form = $this->getForm()
@@ -94,9 +94,9 @@ class {{ Controller }} extends CrudController
            }
 
            ${{ bean }} = {{ Factory }}::createFromArray($form->getValues());
-           $this->getContainer()->get('{{ Catalog }}')->create(${{ bean }});
+           $this->get{{ Catalog }}()->create(${{ bean }});
 
-           $this->setFlash('ok', "Se ha guardado correctamente el {{ User }}");
+           $this->setFlash('ok', $this->i18n->_("Se ha guardado correctamente el {{ User }}"));
         }
         $this->_redirect('{{ slug }}/list');
     }
@@ -118,12 +118,12 @@ class {{ Controller }} extends CrudController
             }
 
             $id = $this->getRequest()->getParam('id');
-            ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, "No existe el {{ Bean }} con Id {$id}");
+            ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
 
             {{ Factory }}::populate(${{ bean }}, $form->getValues());
-            $this->getContainer()->get('{{ Catalog }}')->update(${{ bean }});
+            $this->get{{ Catalog }}()->update(${{ bean }});
 
-            $this->setFlash('ok', "Se actualizo correctamente el {{ Bean}}");
+            $this->setFlash('ok', $this->i18n->_("Se actualizo correctamente el {{ Bean}}"));
         }
         $this->_redirect('{{ slug }}/list');
     }
@@ -132,6 +132,22 @@ class {{ Controller }} extends CrudController
      *
      */
     public function deleteAction(){
+        $id = $this->getRequest()->getParam('id');
+        ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
+{% if fields.hasColumnName('/status/i') %}
+{% set statusField = fields.getByColumnName('/status/i') %}
+        ${{ bean }}->{{ statusField.setter }}({{ Bean }}::${{ statusField.getName().toUpperCamelCase }}['Inactive']);
+{% endif %}
+        $this->get{{ Catalog }}()->update(${{ bean }});
+        $this->setFlash('ok', $this->i18n->_("Se desactivo correctamente el {{ Bean}}"));
+        $this->_redirect('{{ slug }}/list');
+    }
+    
+    /**
+     * @return \{{ Catalog.getFullname() }}
+     */
+    protected function get{{ Catalog }}(){
+        return $this->getContainer()->get('{{ Catalog }}');
     }
 
     /**
@@ -142,7 +158,7 @@ class {{ Controller }} extends CrudController
     {
         $form = new {{ Form }}();
         $submit = new Zend_Form_Element_Submit("send");
-        $submit->setLabel("Guardar");
+        $submit->setLabel($this->i18n->_("Guardar"));
         $form->addElement($submit)->setMethod('post');
         $form->twitterDecorators();
         return $form;

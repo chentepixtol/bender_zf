@@ -72,5 +72,16 @@ class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ Abs
         return $array;
 {% endif %}
     }
+{% if table.getOptions.has('crud') and fields.hasColumnName('/status/i') %}
+
+{% set statusField = fields.getByColumnName('/status/i') %}
+    /**
+     * @staticvar array
+     */    
+    public static ${{ statusField.getName().toUpperCamelCase() }} = array(
+        'Active' => 1,
+        'Inactive' => 2,
+    );
+{% endif %}
 
 }
