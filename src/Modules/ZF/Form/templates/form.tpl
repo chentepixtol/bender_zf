@@ -53,7 +53,7 @@ class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form'
 {% else %}
         $element = new {{ ElementText }}('{{ field.getName().toUnderscore() }}');
 {% endif %}
-        $element->setLabel('{{ field.getName().toUpperCamelCase() }}');
+        $element->setLabel($this->getTranslator()->_('{{ field.getName().toUpperCamelCase() }}'));
         $element->addValidator($this->validator->getFor('{{ field.getName() }}'));
         $element->addFilter($this->filter->getFor('{{ field }}'));
 {% if field.isRequired %}
