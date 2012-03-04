@@ -5,7 +5,6 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     
     <services>
-    
 {% for table in tables.filterUseService() %}
 {% set Service = classes.get(table.getObject().toString() ~ "Service") %}
 {% set Catalog = classes.get(table.getObject().toString() ~ "Catalog") %}
@@ -21,6 +20,6 @@
             <call method="setDBAO"><argument type="service" id="dbao" /></call>
         </service>
 {% endfor %}
-
     </services>
+    
 </container>

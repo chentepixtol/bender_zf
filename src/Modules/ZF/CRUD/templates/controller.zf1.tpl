@@ -29,7 +29,7 @@ class {{ Controller }} extends CrudController
     public function listAction()
     {
         $page = $this->getRequest()->getParam('page', 1);
-       
+
         $this->view->form = $form = $this->getFilterForm();
         if( $this->getRequest()->isPost() ){
             $form->populate($this->getRequest()->getParams());
@@ -42,6 +42,11 @@ class {{ Controller }} extends CrudController
             
         $this->view->{{ collection }} = ${{ collection }};
         $this->view->paginator = $this->createPaginator($total, $page);
+{% for foreignKey in foreignKeys %}
+{% set classForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()) %}
+{% set queryForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()~'Query') %}
+        $this->view->{{ classForeign.getName().pluralize() }} = \{{ queryForeign.getFullName() }}::create()->find()->toCombo();
+{% endfor %}
     }
 
     /**

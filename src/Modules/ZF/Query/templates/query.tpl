@@ -74,6 +74,9 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
      */
     protected function init()
     {
+{% if table.getOptions().has('isCatalog') %}
+        $this->useMemoryCache();
+{% endif %}
         $this->from({{ Bean }}::TABLENAME, "{{ Bean }}");
 {% set auxTable = table %}
 {% for i in 1..5 %}
