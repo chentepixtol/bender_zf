@@ -92,11 +92,25 @@ class {{ Controller }} extends CrudController
                $this->view->form = $form;
                return;
            }
+           
+           try
+           {
+               $this->get{{ Catalog }}()->beginTransaction();
+               
+               ${{ bean }} = {{ Factory }}::createFromArray($form->getValues());
+               $this->get{{ Catalog }}()->create(${{ bean }});
+{% if table.getOptions().has('crud_logger') %}
+               $this->newLogForCreate(${{ bean }});
+{% endif %}
 
-           ${{ bean }} = {{ Factory }}::createFromArray($form->getValues());
-           $this->get{{ Catalog }}()->create(${{ bean }});
-
-           $this->setFlash('ok', $this->i18n->_("Se ha guardado correctamente el {{ User }}"));
+               $this->get{{ Catalog }}()->commit();
+               $this->setFlash('ok', $this->i18n->_("Se ha guardado correctamente el {{ User }}"));
+           }
+           catch(Exception $e)
+           {
+               $this->get{{ Catalog }}()->rollBack();
+               $this->setFlash('error', $this->i18n->_($e->getMessage()));
+           }
         }
         $this->_redirect('{{ slug }}/list');
     }
@@ -120,10 +134,24 @@ class {{ Controller }} extends CrudController
             $id = $this->getRequest()->getParam('id');
             ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
 
-            {{ Factory }}::populate(${{ bean }}, $form->getValues());
-            $this->get{{ Catalog }}()->update(${{ bean }});
+            try
+            {
+                $this->get{{ Catalog }}()->beginTransaction();
+                
+                {{ Factory }}::populate(${{ bean }}, $form->getValues());
+                $this->get{{ Catalog }}()->update(${{ bean }});
+{% if table.getOptions().has('crud_logger') %}
+                $this->newLogForUpdate(${{ bean }});
+{% endif %}
 
-            $this->setFlash('ok', $this->i18n->_("Se actualizo correctamente el {{ Bean}}"));
+                $this->get{{ Catalog }}()->commit();
+                $this->setFlash('ok', $this->i18n->_("Se actualizo correctamente el {{ Bean}}"));
+            }
+            catch(Exception $e)
+            {
+                $this->get{{ Catalog }}()->rollBack();
+                $this->setFlash('error', $this->i18n->_($e->getMessage()));
+            }
         }
         $this->_redirect('{{ slug }}/list');
     }
@@ -134,15 +162,59 @@ class {{ Controller }} extends CrudController
     public function deleteAction(){
         $id = $this->getRequest()->getParam('id');
         ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
+        
+        try
+        {
+            $this->get{{ Catalog }}()->beginTransaction();
+
 {% if fields.hasColumnName('/status/i') %}
 {% set statusField = fields.getByColumnName('/status/i') %}
-        ${{ bean }}->{{ statusField.setter }}({{ Bean }}::${{ statusField.getName().toUpperCamelCase }}['Inactive']);
+            ${{ bean }}->{{ statusField.setter }}({{ Bean }}::${{ statusField.getName().toUpperCamelCase }}['Inactive']);
 {% endif %}
-        $this->get{{ Catalog }}()->update(${{ bean }});
-        $this->setFlash('ok', $this->i18n->_("Se desactivo correctamente el {{ Bean}}"));
+            $this->get{{ Catalog }}()->update(${{ bean }});
+{% if table.getOptions().has('crud_logger') %}
+            $this->newLogForDelete(${{ bean }});
+{% endif %}
+
+            $this->get{{ Catalog }}()->commit();
+            $this->setFlash('ok', $this->i18n->_("Se desactivo correctamente el {{ Bean}}"));
+        }
+        catch(Exception $e)
+        {
+            $this->get{{ Catalog }}()->rollBack();
+            $this->setFlash('error', $this->i18n->_($e->getMessage()));
+        }
         $this->_redirect('{{ slug }}/list');
     }
-    
+{% if table.getOptions().has('crud_logger') %}
+{% set logger = classes.get(table.getOptions().get('crud_logger')) %}
+{% set loggerFactory = classes.get(table.getOptions().get('crud_logger')~'Factory') %}
+{% set loggerCatalog = classes.get(table.getOptions().get('crud_logger')~'Catalog') %}
+     
+    /**
+     * @param {{ Bean }} ${{ bean }}
+     * @return \{{ logger.getFullname() }}
+     */
+    protected function newLogForCreate({{ Bean }} ${{ bean }}){
+        throw new Exception("No implementado aun");
+    }
+     
+    /**
+     * @param {{ Bean }} ${{ bean }}
+     * @return \{{ logger.getFullname() }}
+     */
+    protected function newLogForUpdate({{ Bean }} ${{ bean }}){
+        throw new Exception("No implementado aun");
+    }
+     
+    /**
+     * @param {{ Bean }} ${{ bean }}
+     * @return \{{ logger.getFullname() }}
+     */
+    protected function newLogForDelete({{ Bean }} ${{ bean }}){
+        throw new Exception("No implementado aun");
+    }
+{% endif %}    
     /**
      * @return \{{ Catalog.getFullname() }}
      */
