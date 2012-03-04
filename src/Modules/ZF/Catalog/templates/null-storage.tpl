@@ -13,16 +13,16 @@ class {{ NullStorage }} implements {{ Storage }}
      * @param mixed $object
      */
     public function save($key, $object){}
-    
+
     /**
      * Load
      * @param string $key
      * @return mixed
      */
-    public function load($key){ 
+    public function load($key){
         return null;
     }
-    
+
     /**
      * Exists
      * @param string
@@ -31,12 +31,12 @@ class {{ NullStorage }} implements {{ Storage }}
     public function exists($key){
         return false;
     }
-    
+
     /**
      * Delete cache
      */
     public function removeAll(){}
-    
+
     /**
      *
      */

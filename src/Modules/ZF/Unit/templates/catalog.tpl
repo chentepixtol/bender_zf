@@ -21,17 +21,17 @@ class {{ Catalog }}Test extends {{ BaseTest }}
 
         ${{ bean }} = $this->new{{ Bean }}();
         ${{ catalog }}->create(${{ bean }});
-        
+
         $lastQuery = $dbAdapter->getProfiler()->getLastQueryProfile();
 
         $this->assertEquals(999, ${{ bean }}->{{ primaryKey.getter }}());
-        
+
         $values = implode(array_fill(0, count($this->getColumns()), "?"), ', ');
         $keys = implode(array_keys($this->getColumns()), ', ');
         $this->assertEquals("INSERT INTO {{ table.getName() }} (". $keys .") VALUES (" . $values . ")", $lastQuery->getQuery());
         $this->assertEquals(array_values($this->getColumns()), array_values($lastQuery->getQueryParams()));
     }
-    
+
     /**
      * @test
      */
@@ -45,14 +45,14 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         ${{ bean }} = $this->new{{ Bean }}();
         ${{ bean }}->{{ primaryKey.setter }}(999);
         ${{ catalog }}->update(${{ bean }});
-        
+
         $lastQuery = $dbAdapter->getProfiler()->getLastQueryProfile();
-        
+
         $keys = "SET " . implode(array_keys($this->getColumns()), ' = ?, ') . " = ?";
         $this->assertEquals("UPDATE {{ table.getName() }} ". $keys ." WHERE ({{ primaryKey }} = '999')", $lastQuery->getQuery());
         $this->assertEquals(array_values($this->getColumns()), array_values($lastQuery->getQueryParams()));
     }
-    
+
     /**
      * @test
      */
@@ -71,7 +71,7 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         $this->assertTrue(${{ bean }} instanceOf \{{ Bean.getFullname() }} );
         $this->assertEquals($row, ${{ bean }}->toArrayFor(array_keys($row)) );
     }
-    
+
     /**
      * @test
      */
@@ -84,33 +84,33 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         $this->assertEquals(2, ${{ collection }}->count());
         $this->assertEquals(array(999, 555), ${{ collection }}->getPrimaryKeys());
     }
-    
+
     /**
      * @test
      */
     public function fetchAll()
     {
         ${{ catalog }} = $this->getCatalogWithMultipleRows($this->getRows());
-        
+
         $resultSet = ${{ catalog }}->fetchAll($this->getEmptyQuery());
         $this->assertTrue(is_array($resultSet));
         $this->assertEquals(2 , count($resultSet));
         $this->assertEquals($this->getRows(), $resultSet);
     }
-    
+
     /**
      * @test
      */
     public function fetchCol()
     {
         ${{ catalog }} = $this->getCatalogWithMultipleRows( array(999, 555) );
-        
+
         $resultSet = ${{ catalog }}->fetchCol($this->getEmptyQuery());
         $this->assertTrue(is_array($resultSet));
         $this->assertEquals(2 , count($resultSet));
         $this->assertEquals(array(999, 555), $resultSet);
     }
-    
+
     /**
      * @test
      */
@@ -134,7 +134,7 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         $this->assertEquals(2 , count($resultSet));
         $this->assertEquals(array(999 => 'value', 555 => 'value'), $resultSet);
     }
-    
+
     /**
      * @test
      */
@@ -143,14 +143,14 @@ class {{ Catalog }}Test extends {{ BaseTest }}
 
         $dbAdapter = new \Zend_Test_DbAdapter();
         ${{ catalog }}->setDBAO($this->getDBAOMockup($dbAdapter));
-        
+
         try{
             ${{ catalog }}->create(new \stdClass());
             $this->fail("Se deberia de lanzar una exception");
         }catch(\{{ Exception.getFullname() }} $e){
             $this->assertTrue(true);
         }
-        
+
         try{
             ${{ catalog }}->update(new \stdClass());
             $this->fail("Se deberia de lanzar una exception");
@@ -158,7 +158,7 @@ class {{ Catalog }}Test extends {{ BaseTest }}
             $this->assertTrue(true);
         }
     }
-    
+
     /**
      * @return {{ Catalog }}
      */
@@ -170,10 +170,10 @@ class {{ Catalog }}Test extends {{ BaseTest }}
 
         $stmt1 = \Zend_Test_DbStatement::createSelectStatement($rows);
         $dbAdapter->appendStatementToStack($stmt1);
-        
+
         return ${{ catalog }};
     }
-    
+
     /**
      * @return array
      */
@@ -181,24 +181,24 @@ class {{ Catalog }}Test extends {{ BaseTest }}
         $row999 = array_merge(array('{{ primaryKey }}' => 999), $this->getColumns());
         $row555 = array_merge(array('{{ primaryKey }}' => 555), $this->getColumns());
         $rows = array($row999, $row555);
-        
+
         return $rows;
     }
-    
+
     /**
      * @return {{ Query.getFullname() }}
      */
     private function getEmptyQuery(){
         return \{{ Query.getFullname() }}::create();
     }
-    
+
     /**
      * @return {{ Bean }}
      */
     private function new{{ Bean }}(){
         return \{{ Factory.getFullname() }}::createFromArray($this->getColumns());
     }
-    
+
     /**
      * @return array
      */

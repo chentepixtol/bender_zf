@@ -21,7 +21,7 @@ class {{ MemoryStorage }} implements {{ Storage }}
     public function save($key, $object){
         self::$cache[$key] = $object;
     }
-    
+
     /**
      * Load
      * @param string $key
@@ -33,7 +33,7 @@ class {{ MemoryStorage }} implements {{ Storage }}
         }
         return self::$cache[$key];
     }
-    
+
     /**
      * Exists
      * @param string
@@ -42,19 +42,19 @@ class {{ MemoryStorage }} implements {{ Storage }}
     public function exists($key){
         return array_key_exists($key, self::$cache);
     }
-    
+
     /**
      * Delete cache
      */
     public function removeAll(){
         self::$cache = array();
     }
-    
+
     /**
      *
      */
     public function remove($key){
         unset(self::$cache[$key]);
     }
-    
+
 }

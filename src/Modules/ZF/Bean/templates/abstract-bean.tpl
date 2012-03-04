@@ -7,7 +7,7 @@
 {% endif %}
 
 {% include "header_class.tpl" with {'infoClass': AbstractBean} %}
-abstract class {{ AbstractBean }} implements {{ BaseBean }} 
+abstract class {{ AbstractBean }} implements {{ BaseBean }}
 {
 
     /**
@@ -19,10 +19,10 @@ abstract class {{ AbstractBean }} implements {{ BaseBean }}
         $all = $this->toArray();
         foreach($fields as $field){
             if( array_key_exists($field, $all) ){
-                $array[$field] = $all[$field];    
+                $array[$field] = $all[$field];
             }
         }
         return $array;
     }
-    
+
 }

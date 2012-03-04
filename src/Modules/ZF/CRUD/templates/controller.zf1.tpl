@@ -34,13 +34,13 @@ class {{ Controller }} extends CrudController
         if( $this->getRequest()->isPost() ){
             $form->populate($this->getRequest()->getParams());
         }
-        
+
         $total = {{ Query }}::create()->filter($form->getValues())->count();
         $this->view->{{ Bean.getName().pluralize() }} = ${{ Bean.getName().pluralize() }} = {{ Query }}::create()
             ->filter($form->getValues())
             ->page($page, $this->getMaxPerPage())
             ->find();
-            
+
         $this->view->paginator = $this->createPaginator($total, $page);
 {% for foreignKey in foreignKeys %}
 {% set classForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()) %}
@@ -55,7 +55,7 @@ class {{ Controller }} extends CrudController
      */
     public function newAction()
     {
-        $url = $this->generateUrl('{{ slug }}', 'create'); 
+        $url = $this->generateUrl('{{ slug }}', 'create');
         $this->view->form = $this->getForm()->setAction($url);
     }
 
@@ -92,11 +92,11 @@ class {{ Controller }} extends CrudController
                $this->view->form = $form;
                return;
            }
-           
+
            try
            {
                $this->get{{ Catalog }}()->beginTransaction();
-               
+
                ${{ bean }} = {{ Factory }}::createFromArray($form->getValues());
                $this->get{{ Catalog }}()->create(${{ bean }});
 {% if table.getOptions().has('crud_logger') %}
@@ -137,7 +137,7 @@ class {{ Controller }} extends CrudController
             try
             {
                 $this->get{{ Catalog }}()->beginTransaction();
-                
+
                 {{ Factory }}::populate(${{ bean }}, $form->getValues());
                 $this->get{{ Catalog }}()->update(${{ bean }});
 {% if table.getOptions().has('crud_logger') %}
@@ -155,14 +155,14 @@ class {{ Controller }} extends CrudController
         }
         $this->_redirect('{{ slug }}/list');
     }
-    
+
     /**
      *
      */
     public function deleteAction(){
         $id = $this->getRequest()->getParam('id');
         ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
-        
+
         try
         {
             $this->get{{ Catalog }}()->beginTransaction();
@@ -190,7 +190,7 @@ class {{ Controller }} extends CrudController
 {% set logger = classes.get(table.getOptions().get('crud_logger')) %}
 {% set loggerFactory = classes.get(table.getOptions().get('crud_logger')~'Factory') %}
 {% set loggerCatalog = classes.get(table.getOptions().get('crud_logger')~'Catalog') %}
-     
+
     /**
      * @param {{ Bean }} ${{ bean }}
      * @return \{{ logger.getFullname() }}
@@ -198,7 +198,7 @@ class {{ Controller }} extends CrudController
     protected function newLogForCreate({{ Bean }} ${{ bean }}){
         throw new Exception("No implementado aun");
     }
-     
+
     /**
      * @param {{ Bean }} ${{ bean }}
      * @return \{{ logger.getFullname() }}
@@ -206,7 +206,7 @@ class {{ Controller }} extends CrudController
     protected function newLogForUpdate({{ Bean }} ${{ bean }}){
         throw new Exception("No implementado aun");
     }
-     
+
     /**
      * @param {{ Bean }} ${{ bean }}
      * @return \{{ logger.getFullname() }}
@@ -214,7 +214,7 @@ class {{ Controller }} extends CrudController
     protected function newLogForDelete({{ Bean }} ${{ bean }}){
         throw new Exception("No implementado aun");
     }
-{% endif %}    
+{% endif %}
     /**
      * @return \{{ Catalog.getFullname() }}
      */
@@ -235,7 +235,7 @@ class {{ Controller }} extends CrudController
         $form->twitterDecorators();
         return $form;
     }
-    
+
     /**
      *
      * @return {{ Form.getFullName() }}

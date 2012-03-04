@@ -12,7 +12,7 @@ interface {{ classes.get('Factory') }}
      * @return \{{ classes.get('Bean').getFullName() }}
      */
     public static function createFromArray($fields);
-    
+
     /**
      *
      * @static

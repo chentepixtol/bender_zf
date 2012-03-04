@@ -14,7 +14,7 @@ use Zend_Filter as ZendFilter;
  * @author chente
  *
  */
-class {{ Filter }} extends {% if parent %}{{ classes.get(parent.getObject()~'Filter') }}{% else %}{{ BaseFilter }}{% endif %}  
+class {{ Filter }} extends {% if parent %}{{ classes.get(parent.getObject()~'Filter') }}{% else %}{{ BaseFilter }}{% endif %}
 {
 
     /**
@@ -24,9 +24,9 @@ class {{ Filter }} extends {% if parent %}{{ classes.get(parent.getObject()~'Fil
     {
         parent::__construct();
 {% for field in fields %}
-        $this->init{{ field.getName().toUpperCamelCase }}Filter(); 
+        $this->init{{ field.getName().toUpperCamelCase }}Filter();
 {% endfor %}
-    }    
+    }
 {% for field in fields %}
 
     /**

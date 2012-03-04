@@ -15,7 +15,7 @@ class {{ Bean }}QueryTest extends {{ BaseTest }}
         $query = {{ Query }}::create();
         $this->assertTrue($query instanceof {{ Query }});
     }
-    
+
     /**
      * @test
       */
@@ -23,7 +23,7 @@ class {{ Bean }}QueryTest extends {{ BaseTest }}
         $query = {{ Query }}::create();
         $this->assertEquals("WHERE ( `{{ Bean }}`.`{{ primaryKey.getName() }}` = 1 )", $query->pk(1)->createWhereSql());
     }
-    
+
     /**
      * @test
      */
@@ -42,7 +42,7 @@ class {{ Bean }}QueryTest extends {{ BaseTest }}
     public function initialization(){
         $query = {{ Query }}::create();
         $defaultColumn = array('{{ Bean }}.*');
-        
+
 {% set auxTable = table %}
 {% for i in 1..5 %}
 {% if auxTable.hasParent() %}
@@ -69,7 +69,7 @@ class {{ Bean }}QueryTest extends {{ BaseTest }}
     public function innerJoin{{ classForeign }}(){
        $query = {{ Query }}::create();
        $query->removeJoins();
-       
+
        $query->innerJoin{{ classForeign }}();
        $sql = "INNER JOIN `{{ relationTable.getName().toString() }}` as `{{ Bean }}2{{ classForeign }}` ON( `{{ Bean }}`.`{{ localColumn.getName().toString() }}` = `{{ Bean }}2{{ classForeign }}`.`{{ relationColumn.getName().toString() }}` ) INNER JOIN `{{ foreignTable.getName() }}` as `{{ classForeign }}` ON( `{{ Bean }}2{{ classForeign }}`.`{{ relationForeignColumn.getName().toString() }}` = `{{ classForeign }}`.`{{ foreignTable.getPrimaryKey().getName().toString() }}` )";
        $this->assertEquals($sql, $query->createJoinSql());
@@ -85,7 +85,7 @@ class {{ Bean }}QueryTest extends {{ BaseTest }}
     public function innerJoin{{ classForeign }}(){
        $query = {{ Query }}::create();
        $query->removeJoins();
-       
+
        $query->innerJoin{{ classForeign }}();
        $sql = "INNER JOIN `{{ foreignKey.getForeignTable().getName().toString() }}` as `{{ classForeign }}` ON( `{{ Bean }}`.`{{ foreignKey.getLocal() }}` = `{{ classForeign }}`.`{{ foreignKey.getForeign().getName().toString() }}` )";
        $this->assertEquals($sql, $query->createJoinSql());

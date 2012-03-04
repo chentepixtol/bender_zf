@@ -15,7 +15,7 @@ use Zend_Validate as ZendValidator;
  * @author chente
  *
  */
-class {{ Validator }} extends {% if parent %}{{ classes.get(parent.getObject()~'Validator') }}{% else %}{{ BaseValidator }}{% endif %}  
+class {{ Validator }} extends {% if parent %}{{ classes.get(parent.getObject()~'Validator') }}{% else %}{{ BaseValidator }}{% endif %}
 {
 
     /**
@@ -25,9 +25,9 @@ class {{ Validator }} extends {% if parent %}{{ classes.get(parent.getObject()~'
     {
         parent::__construct();
 {% for field in fields %}
-        $this->init{{ field.getName().toUpperCamelCase }}Validator(); 
+        $this->init{{ field.getName().toUpperCamelCase }}Validator();
 {% endfor %}
-    }    
+    }
 {% for field in fields %}
 
     /**

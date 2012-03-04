@@ -31,7 +31,7 @@ abstract class {{ Collection }} extends \ArrayIterator
             throw new \InvalidArgumentException("Debe de cumplir con la Interface {{ Collectable }}");
         }
     }
-    
+
     /**
      *
      * validate Callback
@@ -101,7 +101,7 @@ abstract class {{ Collection }} extends \ArrayIterator
     {
         return parent::offsetExists($index);
     }
-    
+
     /**
      *
      * @param array $array
@@ -283,7 +283,7 @@ abstract class {{ Collection }} extends \ArrayIterator
     public function filter($callable)
     {
         $this->validateCallback($callable);
-        
+
         $newCollection = $this->newInstance();
         $this->each(function(Collectable $collectable) use($newCollection, $callable){
             if( $callable($collectable) ){
@@ -293,11 +293,11 @@ abstract class {{ Collection }} extends \ArrayIterator
 
         return $newCollection;
     }
-    
+
     /**
      * @param mixed $start
      * @param callable $callable
-     * @return mixed 
+     * @return mixed
      */
     public function foldLeft($start, $callable)
     {
@@ -308,7 +308,7 @@ abstract class {{ Collection }} extends \ArrayIterator
         });
         return $result;
     }
-    
+
     /**
      *
      * @param callable $callable
@@ -322,7 +322,7 @@ abstract class {{ Collection }} extends \ArrayIterator
             return $boolean && $callable($collectable);
         });
     }
-    
+
     /**
      *
      * @param callable $callable
@@ -340,7 +340,7 @@ abstract class {{ Collection }} extends \ArrayIterator
 
         return $collections;
     }
-    
+
     /**
      * convert to array
      * @return array
@@ -350,7 +350,7 @@ abstract class {{ Collection }} extends \ArrayIterator
             return array(${{ collectable }}->getIndex() => ${{ collectable }}->toArray());
         });
     }
-    
+
     /**
      *
      * @param array $collections
@@ -366,7 +366,7 @@ abstract class {{ Collection }} extends \ArrayIterator
         };
         return $getCollection;
     }
-    
+
     /**
      *
      * @param Collection $newCollenction

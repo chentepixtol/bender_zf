@@ -17,12 +17,12 @@ interface {{ Collectable }}
      * @return array
      */
     public function toArray();
-    
+
     /**
      * Convert to array
      * @return array
      */
     public function toArrayFor($fields);
-    
+
 
 }

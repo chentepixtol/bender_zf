@@ -10,7 +10,7 @@ class DBAOWrapper implements \{{ DBAO.getFullname() }}{
         $this->dbAdapter = $dbAdapter;
     }
     public function getDbAdapter(){
-        return $this->dbAdapter; 
+        return $this->dbAdapter;
     }
 }
 
@@ -23,7 +23,7 @@ abstract class {{ BaseTest }} extends \PHPUnit_Framework_TestCase
 {
 
     /**
-     * 
+     *
      * @param \Zend_Db_Adapter_Abstract $dbAdapter
      * @return \{{ DBAO.getFullname() }}
      */

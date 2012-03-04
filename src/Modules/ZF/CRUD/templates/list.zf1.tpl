@@ -1,7 +1,7 @@
 {% set slug = Controller.getName().toSlug('newString').replace('-controller','') %}
 
     {$form->render()}
-    
+
     <table class="zebra-striped bordered-table">
         <caption><h3>{$i18n->_('{{ Bean }}')}</h3></caption>
         <thead>
@@ -30,7 +30,6 @@
             {/foreach}
         </tbody>
     </table>
-    
-    
+
+
 {include file='layout/Pager.tpl' paginator=$paginator}
-    

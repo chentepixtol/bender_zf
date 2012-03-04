@@ -24,28 +24,28 @@ class {{ FactoryStorage }}
         if( $name instanceOf {{ Storage }} ){
             return $name;
         }
-        
+
         if( null === $name || (is_string($name) && 'null' == $name) ){
             return self::lazyLoad('null', function(){
                 return new {{ NullStorage }}();
             });
-        }      
-        
+        }
+
         if( is_string($name) && 'memory' == $name ){
             return self::lazyLoad('memory', function(){
                 return new {{ MemoryStorage }}();
             });
         }
-        
+
         if( is_string($name) && 'file' == $name ){
             return self::lazyLoad('file', function(){
                 return new {{ FileStorage }}();
             });
         }
-        
+
         throw new \Exception("No existe el storage especificado ".$name);
     }
-    
+
     /**
      * @param string $name
      * @param Closure $createStorageFn
@@ -56,8 +56,8 @@ class {{ FactoryStorage }}
         if( !isset(self::$storages[$name]) ){
             self::$storages[$name] = $createStorageFn();
         }
-        
-        return self::$storages[$name]; 
-    } 
-    
+
+        return self::$storages[$name];
+    }
+
 }

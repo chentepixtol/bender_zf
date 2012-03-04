@@ -135,7 +135,7 @@ class {{ OptionTest }} extends {{ BaseTest }}
         $this->assertEquals('apple', $option->map($onNull, $onDefined));
         $this->assertEquals('apple', $optionNull->map($onNull, $onDefined));
     }
-    
+
     /**
      * @test
      */

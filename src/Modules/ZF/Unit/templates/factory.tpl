@@ -32,7 +32,7 @@ class {{ Factory }}Test extends {{ BaseTest }}
             $this->assertTrue(true);
         }
     }
-{% endif %}    
+{% endif %}
 
     /**
      * @test
@@ -48,7 +48,7 @@ class {{ Factory }}Test extends {{ BaseTest }}
 
         ${{ bean }} = {{ Factory }}::createFromArray($array);
         $this->assertTrue(${{ bean }} instanceof \{{ Bean.getFullname() }});
-        
+
         ${{ bean }}Copy = {{ Factory }}::createFromArray(${{ bean }}->toArray());
         $this->assertTrue( ${{ bean }} == ${{ bean }}Copy );
 

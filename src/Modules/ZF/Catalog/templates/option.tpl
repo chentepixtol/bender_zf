@@ -113,5 +113,5 @@ class {{ Option }}
     public function isNull(){
         return null == $this->value;
     }
-    
+
 }

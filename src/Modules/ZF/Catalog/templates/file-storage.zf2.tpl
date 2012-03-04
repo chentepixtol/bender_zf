@@ -20,7 +20,7 @@ class {{ FileStorage }} implements {{ Storage }}
      * @var Zend\Cache\Frontend
      */
     private $zendCache = null;
-    
+
     /**
      * @var array
      */
@@ -28,14 +28,14 @@ class {{ FileStorage }} implements {{ Storage }}
         'ttl' => 86400,
         'cache_dir' => '../cache/',
     );
-    
+
     /**
      * @param array $options
      */
     public function __construct($options = array())
     {
-        $this->options = array_merge($this->options, $options); 
-        
+        $this->options = array_merge($this->options, $options);
+
         $this->zendCache = ZendStorageFactory::factory(array(
             'adapter' => array(
                 'name' => 'filesystem',
@@ -53,7 +53,7 @@ class {{ FileStorage }} implements {{ Storage }}
     public function save($key, $object){
         $this->zendCache->save($object, sha1($key));
     }
-    
+
     /**
      * Load
      * @param string $key
@@ -62,7 +62,7 @@ class {{ FileStorage }} implements {{ Storage }}
     public function load($key){
         return $this->zendCache->load(sha1($key));
     }
-    
+
     /**
      * Exists
      * @param string
@@ -71,5 +71,5 @@ class {{ FileStorage }} implements {{ Storage }}
     public function exists($key){
         return $this->zendCache->hasItem(sha1($key));
     }
-    
+
 }

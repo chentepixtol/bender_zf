@@ -8,12 +8,12 @@ use Zend\Cache\Cache;
 {% include "header_class.tpl" with {'infoClass': ChainStorage} %}
 class {{ ChainStorage }} implements {{ Storage }}
 {
-  
+
     /**
      * @var Storage
      */
     private $primaryStorage;
-    
+
     /**
      * @var Storage
      */
@@ -38,7 +38,7 @@ class {{ ChainStorage }} implements {{ Storage }}
         $this->primaryStorage->save($key, $object);
         $this->secondaryStorage->save($key, $object);
     }
-    
+
     /**
      * Load
      * @param string $key
@@ -49,18 +49,18 @@ class {{ ChainStorage }} implements {{ Storage }}
         if( !$this->exists($key) ){
             return null;
         }
-        
+
         if( $this->primaryStorage->exists($key) ){
             return $this->primaryStorage->load($key);
         }
-        
+
         if( $this->secondaryStorage->exists($key) ){
             $object = $this->secondaryStorage->load($key);
             $this->primaryStorage->save($key, $object);
             return $object;
         }
     }
-    
+
     /**
      * Exists
      * @param string
@@ -70,7 +70,7 @@ class {{ ChainStorage }} implements {{ Storage }}
         return $this->primaryStorage->exists($key) ||
         $this->secondaryStorage->exists($key);
     }
-    
+
     /**
      * Delete cache
      */
@@ -78,7 +78,7 @@ class {{ ChainStorage }} implements {{ Storage }}
         $this->primaryStorage->removeAll();
         $this->secondaryStorage->removeAll();
     }
-    
+
     /**
      *
      */
@@ -86,5 +86,5 @@ class {{ ChainStorage }} implements {{ Storage }}
         $this->primaryStorage->remove($key);
         $this->secondaryStorage->remove($key);
     }
-    
+
 }

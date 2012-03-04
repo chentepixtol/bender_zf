@@ -18,10 +18,10 @@ class {{ Factory }}{% if parent %} extends {{ classes.get(parent.getObject()~'Fa
     {
         ${{ bean }} = new {{ Bean }}();
         self::populate(${{ bean }}, $fields);
-        
+
         return ${{ bean }};
     }
-    
+
     /**
      *
      * @static
@@ -38,12 +38,12 @@ class {{ Factory }}{% if parent %} extends {{ classes.get(parent.getObject()~'Fa
         }
 {% for field in fields %}
 
-        if( isset($fields['{{ field }}']) ){  
+        if( isset($fields['{{ field }}']) ){
             ${{ bean }}->{{ field.setter }}($fields['{{ field }}']);
-        }        
-{% endfor %}    
+        }
+{% endfor %}
     }
-    
+
     /**
      * @throws {{ Exception }}
      */

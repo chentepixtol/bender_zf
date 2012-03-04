@@ -22,7 +22,7 @@ use Query\Query;
  * @method \{{ Bean.getFullName() }} getOneByQuery() getOneByQuery(Query $query, {{ classes.get('Storage') }} $storage = null)
  * @method \{{ Collection.getFullName() }} getByQuery() getByQuery(Query $query, {{ classes.get('Storage') }} $storage = null)
  */
-class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ 'Catalog') }}{% else %}{{ AbstractCatalog }} {% endif %} 
+class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ 'Catalog') }}{% else %}{{ AbstractCatalog }} {% endif %}
 {
 
     /**
@@ -95,7 +95,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             $this->throwException("The {{ Bean }} can't be deleted\n", $e);
         }
     }
-    
+
 {% for manyToMany in table.getManyToManyCollection %}
 {% set relationColumn = manyToMany.getRelationColumn() %}
 {% set relationTable = manyToMany.getRelationTable() %}
@@ -111,7 +111,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
 {% for field in relationTable.getColumns().nonForeignKeys() %}
      * @param {{ field.cast('php') }} ${{ field.getName().toCamelCase() }}
 {% endfor %}
-     */ 
+     */
     public function linkTo{{ foreignObject }}(${{ pk1.toCamelCase }}, ${{ pk2.toCamelCase() }}{% for field in relationTable.getColumns().nonForeignKeys() %}, ${{ field.getName().toCamelCase() }}{% endfor%})
     {
         try
@@ -178,7 +178,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
         }
     }
 {% endfor %}
-    
+
     /**
      *
      * makeCollection
@@ -210,7 +210,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             $this->throwException("No es un Query valido");
         }
     }
-    
+
     /**
      *
      * Validate {{ Bean }}

@@ -19,7 +19,7 @@ use \Zend_Form_Element_Text as ElementText;
  * @author chente
  *
  */
-class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form') }}{% else %}{{ BaseForm }}{% endif %} 
+class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form') }}{% else %}{{ BaseForm }}{% endif %}
 {
 
     /**

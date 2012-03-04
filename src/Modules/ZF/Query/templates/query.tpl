@@ -24,7 +24,7 @@ use Query\Query;
  * @method \{{ Bean.getFullName() }} findOneOrThrow() findOneOrThrow($message)
  * @method \{{ Bean.getFullName() }} findByPK() findByPK($pk)
  * @method \{{ Bean.getFullName() }} findByPKOrElse() findByPKOrElse($pk, {{ Bean }} $alternative)
- * @method \{{ Bean.getFullName() }} findByPKOrThrow() findByPKOrThrow($pk, $message)  
+ * @method \{{ Bean.getFullName() }} findByPKOrThrow() findByPKOrThrow($pk, $message)
  * @method {{ Query }} create() create(QuoteStrategy $quoteStrategy = null)
  * @method \Query\Criteria joinOn() joinOn($table, $type = null, $alias = null)
  * @method {{ Query }} joinUsing() joinUsing($table, $usingColumn, $type = null, $alias = null)
@@ -41,13 +41,13 @@ use Query\Query;
  * @method \Query\Criteria where()
  * @method \Query\Criteria having()
  * @method {{ Query }} whereAdd() $column, $value, $comparison = null, $mutatorColumn = null, $mutatorValue = null)
- * @method {{ Query }} bind() bind($parameters) 
+ * @method {{ Query }} bind() bind($parameters)
  * @method {{ Query }} setQuoteStrategy() setQuoteStrategy(QuoteStrategy $quoteStrategy)
  * @method {{ Query }} page() page($page, $itemsPerPage)
  * @method {{ Query }} setLimit() setLimit($limit)
  * @method {{ Query }} setOffset() setOffset($offset)
  * @method {{ Query }} removeColumn() removeColumn($column = null)
- * @method {{ Query }} distinct() 
+ * @method {{ Query }} distinct()
  * @method {{ Query }} select()
  * @method {{ Query }} addColumns() addColumns($columns)
  * @method {{ Query }} addColumn() addColumn($column, $alias = null, $mutator = null)
@@ -62,7 +62,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 {
 
     /**
-     * 
+     *
      * @return \{{ Catalog.getFullName() }}
      */
     protected function getCatalog(){
@@ -96,9 +96,9 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 {% endfor %}
         $this->setDefaultColumn($defaultColumn);
     }
-    
+
     /**
-     * @param mixed $value 
+     * @param mixed $value
      * @return {{ Query }}
      */
     public function pk($value){
@@ -107,7 +107,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
         ));
         return $this;
     }
-    
+
     /**
      * @return array
      */
@@ -115,7 +115,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
        $this->removeColumn()->addColumn({{ Bean }}::{{ table.getPrimaryKey().getName().toUpperCase() }}, 'ids');
        return $this->fetchCol();
     }
-    
+
     /**
      * build fromArray
      * @param array $fields
@@ -126,7 +126,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
         $this->build($this, $fields, $prefix);
         return $this;
     }
-    
+
     /**
      * build fromArray
      * @param Query $query
@@ -136,12 +136,12 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     public static function build(Query $query, $fields, $prefix = '{{ Bean }}')
     {
 {% if parent %}
-        parent::build($query, $fields);    
+        parent::build($query, $fields);
 {% endif %}
 
         $criteria = $query->where();
         $criteria->prefix($prefix);
-        
+
 {% for field in fields %}
         if( isset($fields['{{ field }}']) && !empty($fields['{{ field }}']) ){
             $criteria->add({{ Bean }}::{{ field.getName().toUpperCase() }}, $fields['{{ field }}']);
@@ -185,7 +185,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     {
         $this->innerJoinOn('{{ relationTable.getName().toString() }}', '{{ Bean }}2{{ classForeign }}')
             ->equalFields(array($alias, '{{ localColumn.getName().toString() }}'), array('{{ Bean }}2{{ classForeign }}', '{{ relationColumn.getName().toString() }}'));
-            
+
         $this->innerJoinOn(\{{ classForeign.getFullName() }}::TABLENAME, $aliasForeignTable)
             ->equalFields(array('{{ Bean }}2{{ classForeign }}', '{{ relationForeignColumn.getName().toString() }}'), array($aliasForeignTable, '{{ foreignTable.getPrimaryKey().getName().toString() }}'));
 

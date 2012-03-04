@@ -22,15 +22,15 @@ class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\ZFriendly\Form\
      * @var \{{ classes.get('BaseValidator').getFullName() }} $validator
      */
     protected $validator;
-    
+
     /**
      * @var \{{ classes.get('BaseFilter').getFullName() }} $filter
      */
     protected $filter;
-    
+
     /**
      * @var array
-     */ 
+     */
     protected $elements = array();
 
     /**
@@ -40,7 +40,7 @@ class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\ZFriendly\Form\
         parent::init();
         $this->setView(new ZendView());
     }
-    
+
     /**
      * @param string $fieldName
 {% if isZF2 %}
@@ -55,5 +55,5 @@ class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\ZFriendly\Form\
          }
          return $this->elements[$fieldName];
     }
-   
+
 }

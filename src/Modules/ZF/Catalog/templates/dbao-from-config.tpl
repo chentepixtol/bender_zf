@@ -35,5 +35,5 @@ class DBAOFromConfig implements {{ DBAO }}
     public function getDbAdapter(){
         return $this->dbAdapter;
     }
-    
+
 }

@@ -1,4 +1,4 @@
-<phpunit 
+<phpunit
     bootstrap="Test/bootstrap.php"
     cacheTokens="true"
     colors="false"

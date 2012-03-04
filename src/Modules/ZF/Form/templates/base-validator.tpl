@@ -12,22 +12,22 @@ class {{ BaseValidator }}
 {
 
     /**
-     * 
-     * @var array 
+     *
+     * @var array
      */
     private $messages = array();
-    
+
     /**
-     * 
-     * @var array 
+     *
+     * @var array
      */
     protected $elements = array();
-    
+
     /**
      *
      */
     public function __construct(){}
-    
+
     /**
      * isValid
      * @param array $array
@@ -37,7 +37,7 @@ class {{ BaseValidator }}
     {
         $isValid = true;
         $this->messages = array();
-        
+
         foreach( $this->toArray() as $field  => $validate ){
             if( !$validate->isValid($array[$field]) ){
                 $isValid = false;
@@ -46,7 +46,7 @@ class {{ BaseValidator }}
         }
         return $isValid;
     }
-    
+
     /**
      * @param string $fieldName
 {%if isZF2 %}
@@ -61,7 +61,7 @@ class {{ BaseValidator }}
          }
          return $this->elements[$fieldName];
     }
-    
+
     /**
      *
      * @param string $field
@@ -70,19 +70,19 @@ class {{ BaseValidator }}
     protected function addMessage($field, $messages){
         $this->messages[$field] = $messages;
     }
-    
+
     /**
      * @return array
      */
     public function getMessages(){
         return $this->messages;
     }
-    
+
     /**
      * @return array
      */
     public function toArray(){
         return $this->elements;
     }
-    
+
 }

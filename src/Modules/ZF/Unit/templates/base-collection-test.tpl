@@ -41,7 +41,7 @@ class MyBean implements \{{ Collectable.getFullname() }}
     public function toArray(){
         return array('id' => $this->id, 'value' => $this->value);
     }
-    
+
     public function toArrayFor($fields){
         return array('id' => $this->id, 'value' => $this->value);
     }
@@ -319,7 +319,7 @@ class {{ BaseCollectionTest }} extends {{ BaseTest }}
             3 => $myBean3->toArray()
         ), $myCollection->toArray());
     }
-    
+
     /**
      *
      * @test
@@ -355,11 +355,11 @@ class {{ BaseCollectionTest }} extends {{ BaseTest }}
             return 'apple' == $myBean->getValue();
         };
         $this->assertTrue($myCollection->forall($onlyApples));
-        
+
         $myCollection->append(new MyBean(5, 'banana'));
         $this->assertFalse($myCollection->forall($onlyApples));
     }
-    
+
     /**
      *
      * @test
@@ -375,13 +375,13 @@ class {{ BaseCollectionTest }} extends {{ BaseTest }}
         $fruits = $myCollection->partition(function(MyBean $myBean){
             return $myBean->getValue();
         });
-        
+
         $this->assertTrue($fruits['apple'] instanceOf MyCollection);
         $this->assertEquals(array(1,3), $fruits['apple']->getPrimaryKeys());
         $this->assertTrue($fruits['banana'] instanceOf MyCollection);
         $this->assertEquals(array(2,4), $fruits['banana']->getPrimaryKeys());
     }
-    
+
     /**
      * @test
      */

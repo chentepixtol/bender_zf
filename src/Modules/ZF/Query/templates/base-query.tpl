@@ -30,13 +30,13 @@ abstract class {{ BaseQuery }} extends Query
      * @return \{{ classes.get('Catalog').getFullName() }}
      */
     abstract protected function getCatalog();
-    
+
     /**
      * @abstract
      * @return {{ BaseQuery }}
      */
     abstract public function pk($primaryKey);
-    
+
     /**
      * @abstract
      * @return array
@@ -50,7 +50,7 @@ abstract class {{ BaseQuery }} extends Query
        $this->setStorage(\{{ FactoryStorage.getFullName() }}::create('memory'));
        return $this;
     }
-    
+
     /**
      * @return {{ BaseQuery }}
      */
@@ -58,7 +58,7 @@ abstract class {{ BaseQuery }} extends Query
        $this->setStorage(\{{ FactoryStorage.getFullName() }}::create('file'));
        return $this;
     }
-    
+
     /**
      *
      * @return \{{ classes.get('Collection').getFullName() }}
@@ -74,7 +74,7 @@ abstract class {{ BaseQuery }} extends Query
     public function findOne(){
         return $this->getCatalog()->getOneByQuery($this, $this->getStorage());
     }
-    
+
     /**
      * @param mixed $pk
      * @return \{{ classes.get('Bean').getFullName() }}
@@ -82,7 +82,7 @@ abstract class {{ BaseQuery }} extends Query
     public function findByPK($pk){
         return $this->pk($pk)->findOne();
     }
-    
+
     /**
      * @return int
      */
@@ -90,14 +90,14 @@ abstract class {{ BaseQuery }} extends Query
        $this->addColumn($field, 'count', Query::COUNT);
        return (int) $this->fetchOne();
     }
-    
+
     /**
      * @return \{{ Option.getFullName() }}
      */
     public function findOneOption(){
         return new {{ Option }}($this->findOne());
     }
-    
+
     /**
      * @param mixed $alternative
      * @return \{{ classes.get('Bean').getFullName() }}
@@ -105,7 +105,7 @@ abstract class {{ BaseQuery }} extends Query
     public function findOneOrElse($alternative){
         return $this->findOneOption()->getOrElse($alternative);
     }
-    
+
     /**
      * @param mixed $message
      * @return \{{ classes.get('Bean').getFullName() }}
@@ -114,7 +114,7 @@ abstract class {{ BaseQuery }} extends Query
     public function findOneOrThrow($message){
         return $this->findOneOption()->getOrThrow($message);
     }
-    
+
     /**
      * @param mixed $pk
      * @return \{{ Option.getFullName() }}
@@ -122,7 +122,7 @@ abstract class {{ BaseQuery }} extends Query
     public function findOptionByPK($pk){
         return $this->pk($pk)->findOneOption();
     }
-    
+
     /**
      * @param mixed $pk
      * @param mixed $alternative
@@ -131,7 +131,7 @@ abstract class {{ BaseQuery }} extends Query
     public function findByPKOrElse($pk, $alternative){
         return $this->findOptionByPK($pk)->getOrElse($alternative);
     }
-    
+
     /**
      * @param mixed $pk
      * @param mixed $message
@@ -173,7 +173,7 @@ abstract class {{ BaseQuery }} extends Query
     public function fetchPairs(){
         return $this->getCatalog()->fetchPairs($this, $this->getStorage());
     }
-    
+
     /**
      * @param {{ Storage }} $storage
      * @return {{ BaseQuery }}
@@ -182,12 +182,12 @@ abstract class {{ BaseQuery }} extends Query
         $this->storage = $storage;
         return $this;
     }
-    
+
     /**
      * @return \{{ Storage.getFullName() }}
      */
     public function getStorage(){
         return $this->storage;
     }
-    
+
 }

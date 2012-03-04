@@ -7,9 +7,9 @@ interface {{ DBAO }}
 {
 
     /**
-     * 
+     *
      * @return \Zend_Db_Adapter_Abstract
      */
     public function getDbAdapter();
-    
+
 }

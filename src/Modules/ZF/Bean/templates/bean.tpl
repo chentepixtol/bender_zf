@@ -6,7 +6,7 @@ namespace {{ Bean.getNamespace() }};
 {% if AbstractBean.getNamespace() != Bean.getNamespace() %}{{ AbstractBean.printUse() }}{% endif %}
 {% endif %}
 {% include "header_class.tpl" with {'infoClass': Bean} %}
-class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ AbstractBean }}{% endif %} 
+class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ AbstractBean }}{% endif %}
 {
 
     /**
@@ -77,7 +77,7 @@ class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ Abs
 {% set statusField = fields.getByColumnName('/status/i') %}
     /**
      * @staticvar array
-     */    
+     */
     public static ${{ statusField.getName().toUpperCamelCase() }} = array(
         'Active' => 1,
         'Inactive' => 2,

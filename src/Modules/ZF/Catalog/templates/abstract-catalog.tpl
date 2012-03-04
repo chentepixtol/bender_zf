@@ -27,7 +27,7 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
      * @throws Exception
      */
     abstract protected function validateQuery(Query $query);
-    
+
     /**
      *
      * Validate {{ Bean }}
@@ -64,15 +64,15 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
     public function isNotNull($field){
         return !is_null($field);
     }
-    
+
     /**
      * Engines
      * @var array
      */
     protected static $engines = array("pgsql", "mysql");
-    
+
     /**
-    
+
     private $dbao;
 
     /**
@@ -91,7 +91,7 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
     public function getDb(){
         return $this->dbao->getDbAdapter();
     }
-    
+
     /**
      * @param \Application\Database\DBAO $dbao
      */
@@ -105,7 +105,7 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
      */
     protected function isNestable()
     {
-        $engineName = $this->getDb()->getConnection()->getAttribute(\PDO::ATTR_DRIVER_NAME); 
+        $engineName = $this->getDb()->getConnection()->getAttribute(\PDO::ATTR_DRIVER_NAME);
         return in_array($engineName, self::$engines);
     }
 
@@ -159,7 +159,7 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
     public function getByQuery(Query $query, {{ Storage }} $storage = null)
     {
         $storage = {{ FactoryStorage }}::create($storage);
-        
+
         $key = "getByQuery:". $query->createSql();
         if( $storage->exists($key) ){
             $collection = $storage->load($key);
@@ -183,21 +183,21 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
     public function getOneByQuery(Query $query, {{ Storage }} $storage = null)
     {
         $storage = {{ FactoryStorage }}::create($storage);
-        
+
         $key = "getOneByQuery:". $query->createSql();
         if( $storage->exists($key) ){
             ${{ bean }} = $storage->load($key);
         }else{
             ${{ bean }} = $this->getByQuery($query, $storage)->getOne();
             $storage->save($key, ${{ bean }});
-        }   
-        
+        }
+
         return ${{ bean }};
     }
 
     /**
      * @param Query $query
-     * @param {{  Storage }} $storage 
+     * @param {{  Storage }} $storage
      * @return array
      */
     public function fetchAll(Query $query, {{ Storage }} $storage = null){
@@ -228,11 +228,11 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
      * @return mixed
      */
     public function fetchPairs(Query $query, {{ Storage }} $storage = null){
-        return $this->executeDbMethod($query, 'fetchPairs', $storage); 
+        return $this->executeDbMethod($query, 'fetchPairs', $storage);
     }
-    
+
     /**
-     * 
+     *
      * @param Query $query
      * @param string $method
      * @return mixed
@@ -244,21 +244,21 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
         if( !method_exists($this->getDb(), $method) ){
             $this->throwException("El metodo {$method} no existe");
         }
-        
+
         $storage = {{ FactoryStorage }}::create($storage);
         try
         {
             $sql = $query->createSql();
             if( $storage->exists($sql) ){
                 $resultset = $storage->load($sql);
-            }else{   
+            }else{
                 $resultset = call_user_func_array(array($this->getDb(), $method), array($sql));
                 $storage->save($sql, $resultset);
             }
         }catch(\Exception $e){
             $this->throwException("Cant execute query \n", $e);
         }
-        
+
         return $resultset;
     }
 
