@@ -36,6 +36,27 @@ class {{ Validator }} extends {% if parent %}{{ classes.get(parent.getObject()~'
     protected function init{{ field.getName().toUpperCamelCase }}Validator()
     {
         $validator = new ZendValidator();
+{% if field.isRequired() %}
+        $validator->addValidator($this->getNotEmpty());
+{% endif %}
+{% if field.isBigint() or field.isInteger() or field.isSmallint() %}
+        $validator->addValidator($this->getDigits());
+{% endif %}
+{% if  field.isFloat() or field.isDecimal() %}
+        $validator->addValidator($this->getFloat());
+{% endif %}
+{% if field.isDate() %}
+        $validator->addValidator($this->getDateMysql());
+{% endif %}
+{% if field.isDatetime() %}
+        $validator->addValidator($this->getDatetimeMysql());
+{% endif %}
+{% if field.isTime() %}
+        $validator->addValidator($this->getTimeMysql());
+{% endif %}
+{% if field.isString() or field.isText() %}
+        $validator->addValidator($this->getAlnumSpaces());
+{% endif %}
         $this->elements['{{ field.getName() }}'] = $validator;
     }
 {% endfor %}

@@ -34,7 +34,11 @@ class {{ Filter }} extends {% if parent %}{{ classes.get(parent.getObject()~'Fil
      */
     protected function init{{ field.getName().toUpperCamelCase }}Filter()
     {
-        $filter = new ZendFilter();
+        $filter = new ZendFilter();        
+{% if field.isString() or field.isText() %}
+        $filter->addFilter($this->getStringTrim());
+        $filter->addFilter($this->getUcwords());
+{% endif %}
         $this->elements['{{ field.getName() }}'] = $filter;
     }
 {% endfor %}

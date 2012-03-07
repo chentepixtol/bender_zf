@@ -18,10 +18,10 @@
 {% set inForeignKeys = fullFields.inForeignKeys %}
 {% for field in fullFields %}
 {% if inForeignKeys.containsIndex(field.getName().toString()) %}
-{% set foreignClass = classes.get(foreignKeys.getByColumnName(field.getName().toString()).getForeignTable().getObject()) %}
+{% set foreignClass = classes.get(fullForeignKeys.getByColumnName(field.getName().toString()).getForeignTable().getObject()) %}
                     <td>{${{ foreignClass.getName().pluralize() }}[${{ bean}}->{{ field.getter() }}()]}</td>
 {% else %}
-                    <td>{${{ bean}}->{{ field.getter() }}()}</td>
+                    <td>{${{ bean }}->{{ field.getter() }}()}</td>
 {% endif %}
 {% endfor %}
                     <td><a href="{$baseUrl}/{{slug}}/edit/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Edit')}</a></td>

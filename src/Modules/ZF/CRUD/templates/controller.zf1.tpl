@@ -42,7 +42,7 @@ class {{ Controller }} extends CrudController
             ->find();
 
         $this->view->paginator = $this->createPaginator($total, $page);
-{% for foreignKey in foreignKeys %}
+{% for foreignKey in fullForeignKeys %}
 {% set classForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()) %}
 {% set queryForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()~'Query') %}
         $this->view->{{ classForeign.getName().pluralize() }} = \{{ queryForeign.getFullName() }}::create()->find()->toCombo();

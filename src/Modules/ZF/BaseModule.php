@@ -34,6 +34,7 @@ abstract class BaseModule extends AbstractModule
         $this->getView()->fields = $table->getColumns();
         $this->getView()->fullFields = $table->getFullColumns();
         $this->getView()->foreignKeys = $table->getForeignKeys();
+        $this->getView()->fullForeignKeys = $table->getFullForeignKeys();
         $this->getView()->primaryKey = $table->getPrimaryKey();
         $this->getView()->Bean = $bean = $classes->get($table->getObject()->toString());
         $this->getView()->bean = $bean->getName()->toCamelCase();

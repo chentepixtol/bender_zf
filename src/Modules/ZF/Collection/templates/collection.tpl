@@ -19,7 +19,7 @@
  * @method \{{ Collection.getFullName() }} diff() diff(\{{ Collection.getFullName() }} $collection)
  * @method \{{ Collection.getFullName() }} copy()
  */
-class {{ Collection }} extends {{ classes.get('Collection') }}
+class {{ Collection }} extends {% if parent %}{{ classes.get(parent.getObject()~'Collection') }}{% else %}{{ classes.get('Collection') }}{% endif %}
 {
 
     /**

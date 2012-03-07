@@ -18,6 +18,16 @@ class {{ BaseFilter }}
     protected $elements = array();
 
     /**
+     * @var Zend_Filter_StringTrim
+     */
+    private static $stringTrim;
+    
+    /**
+     * @var Zend_Filter_Interface
+     */
+    private static $ucwords;
+    
+    /**
      *
      */
     public function __construct(){}
@@ -56,6 +66,28 @@ class {{ BaseFilter }}
      */
     public function toArray(){
         return $this->elements;
+    }
+    
+    /**
+     * @return \Zend_Filter_Inteface
+     */
+    public static function getStringTrim(){
+        if( null == self::$stringTrim ){
+            self::$stringTrim = new \Zend_Filter_StringTrim();
+        }
+        return self::$stringTrim;
+    }
+    
+    /**
+     * @return \Zend_Filter_Inteface
+     */
+    public static function getUcwords(){
+        if( null == self::$ucwords ){
+            self::$ucwords = new \Zend_Filter_Callback(function($value){
+                return ucwords(strtolower($value));            
+            });
+        }
+        return self::$ucwords;
     }
 
 }
