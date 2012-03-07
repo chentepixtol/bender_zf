@@ -65,7 +65,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
         try
         {
             $data = ${{ bean}}->toArrayFor(
-                array({% for field in fields.nonPrimaryKeys %}'{{ field.getName() }}',{% endfor %})
+                array({% for field in fields.nonPrimaryKeys %}'{{ field.getName() }}', {% endfor %})
             );
             $data = array_filter($data, array($this, 'isNotNull'));
             $this->getDb()->update({{ Bean }}::TABLENAME, $data, "{{ table.getPrimaryKey() }} = '{${{ bean }}->{{ table.getPrimaryKey().getter() }}()}'");

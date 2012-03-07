@@ -26,6 +26,14 @@ class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ Abs
      * @var {{ field.cast('php') }}
      */
     private ${{ field.getName().toCamelCase() }};
+
+{% if field.isDatetime or field.isDate  %}
+    /**
+     * @var \Zend_Date
+     */
+    private ${{ field.getName().toCamelCase() }}AsZendDate;
+
+{% endif %}
 {% endfor %}
 
     /**
@@ -53,6 +61,19 @@ class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ Abs
         $this->{{ field.getName().toCamelCase() }} = ${{ field.getName().toCamelCase()}};
         return $this;
     }
+
+{% if field.isDatetime or field.isDate  %}
+    /**
+     * @return \Zend_Date
+     */
+    public function {{ field.getter }}AsZendDate(){
+        if( null == $this->{{ field.getName().toCamelCase() }}AsZendDate ){
+            $this->{{ field.getName().toCamelCase() }}AsZendDate = new \Zend_Date($this->{{ field.getName().toCamelCase() }}, 'yyyy-MM-dd{% if field.isDatetime %} HH:mm:ss{% endif %}');
+        }
+        return $this->{{ field.getName().toCamelCase() }}AsZendDate;
+    }
+
+{% endif %}
 {% endfor %}
 
     /**

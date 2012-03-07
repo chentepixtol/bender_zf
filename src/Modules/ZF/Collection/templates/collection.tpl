@@ -22,16 +22,27 @@
 class {{ Collection }} extends {{ classes.get('Collection') }}
 {
 
+    /**
+     *
+     * @param {{ Bean }} $collectable
+     */
+    protected function validate($collectable)
+    {
+        if( !($collectable instanceof {{ Bean }}) ){
+            throw new \InvalidArgumentException("Debe de ser un objecto {{ Bean }}");
+        }
+    }
+
 {% if fields.hasColumnName('/name/i') %}
     /**
      * @return array
      */
 {% set fieldName = fields.getByColumnName('/name/i') %}
-	public function toCombo(){
-		return $this->map(function({{ Bean }} ${{ bean }}){
-			return array( ${{ bean }}->{{ primaryKey.getter }}() => ${{ bean }}->{{ fieldName.getter }}()  );
-		});
-	}
+    public function toCombo(){
+        return $this->map(function({{ Bean }} ${{ bean }}){
+            return array( ${{ bean }}->{{ primaryKey.getter }}() => ${{ bean }}->{{ fieldName.getter }}() );
+        });
+    }
 {% endif %}
 
 }

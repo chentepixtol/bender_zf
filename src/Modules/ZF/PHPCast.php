@@ -27,7 +27,7 @@ class PHPCast extends AbstractCast
         }
 
         if( $column->isDate() || $column->isDatetime() || $column->isTime() ){
-            return 'Datetime';
+            return 'string';
         }
 
         if( $column->isString() || $column->isText() ){
