@@ -53,16 +53,19 @@ class Service extends BaseModule
         $tables = $this->getBender()->getDatabase()->getTables()->filterUseService();
 
         $files = new FileCollection();
-        $files->append(new File($classes->get('AbstractService')->getRoute(), $this->getView()->fetch('abstract-service.tpl')));
+        if( !$tables->isEmpty() ){
 
-        while ( $tables->valid() )
-        {
-            $table = $tables->read();
-            $this->shortcuts($table);
-            $content = $this->getView()->fetch('service.tpl');
-            $files->append(
-                new File($classes->get($table->getObject().'Service')->getRoute(), $content)
-            );
+            $files->append(new File($classes->get('AbstractService')->getRoute(), $this->getView()->fetch('abstract-service.tpl')));
+
+            while ( $tables->valid() )
+            {
+                $table = $tables->read();
+                $this->shortcuts($table);
+                $content = $this->getView()->fetch('service.tpl');
+                $files->append(
+                    new File($classes->get($table->getObject().'Service')->getRoute(), $content)
+                );
+            }
         }
 
         return $files;
