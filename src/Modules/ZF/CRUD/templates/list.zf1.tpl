@@ -1,6 +1,37 @@
 {% set slug = Controller.getName().toSlug('newString').replace('-controller','') %}
 {% set statusField = fields.getByColumnName('/status/i') %}
-    {$form->render()}
+
+<table>
+    <tbody>
+{% for foreignKey in fullForeignKeys %}
+{% set classForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()) %}
+{% set field = foreignKey.getLocal %}
+   <td>{$i18n->_('{{ field }}')}</td>
+   <td>{html_options name={{ field }} id={{ field }} options=${{ classForeign.getName().pluralize() }} selected=$post['{{ field }}']}</td>
+{% endfor %}
+{% for field in fullFields.nonForeignKeys() %}
+{% if field.isBigint or field.isInteger or field.isSmallint %}
+   <td>{$i18n->_('{{ field }}')}</td>
+   <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="number{% if field.isRequired() == true %} required{% endif %}" /></td>
+{% elseif field.isText %}
+    <td>{$i18n->_('{{ field }}')}</td>
+    <td><textarea name="{{ field }}" id="{{ field }}" class="{% if field.isRequired() == true %} required{% endif %}">{$post['{{ field }}']}</textarea></td>
+{% elseif field.isDate or field.isDatetime %}
+    <td>{$i18n->_('{{ field }}')}</td>
+    <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="datePicker dateISO{% if field.isRequired() == true %} required{% endif %}" /></td>
+{% elseif field.isBoolean %}
+    <td>{$i18n->_('{{ field }}')}</td>
+    <td><input type="checkbox" name="{{ field }}" id="{{ field }}" value="1" class="{% if field.isRequired() == true %} required{% endif %}" {if $post['{{ field }}']}checked="checked"{/if} /></td>
+{% elseif field.isTime %}
+    <td>{$i18n->_('{{ field }}')}</td>
+    <td>{html_select_time prefix={{ field }} display_seconds=false display_meridian=false time=$post['{{ field }}']}</td>
+{% else %}
+    <td>{$i18n->_('{{ field }}')}</td>
+    <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="{% if field.isRequired() == true %} required{% endif %}" /></td>
+{% endif %}
+{% endfor %}    
+    </tbody>
+</table>
 
     <table class="zebra-striped bordered-table">
         <caption><h3>{$i18n->_('{{ Bean }}')}</h3></caption>

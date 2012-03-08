@@ -44,14 +44,13 @@ class {{ Controller }} extends CrudController
     {
         $page = $this->getRequest()->getParam('page', 1);
 
-        $this->view->form = $form = $this->getFilterForm();
         if( $this->getRequest()->isPost() ){
-            $form->populate($this->getRequest()->getParams());
+            $this->view->post = $post = $this->getRequest()->getParams();
         }
 
-        $total = {{ Query }}::create()->filter($form->getValues())->count();
+        $total = {{ Query }}::create()->filter($post)->count();
         $this->view->{{ Bean.getName().pluralize() }} = ${{ Bean.getName().pluralize() }} = {{ Query }}::create()
-            ->filter($form->getValues())
+            ->filter($post)
             ->page($page, $this->getMaxPerPage())
             ->find();
 
@@ -268,20 +267,6 @@ class {{ Controller }} extends CrudController
         $form = new {{ Form }}();
         $submit = new Zend_Form_Element_Submit("send");
         $submit->setLabel($this->i18n->_("Guardar"));
-        $form->addElement($submit)->setMethod('post');
-        $form->twitterDecorators();
-        return $form;
-    }
-
-    /**
-     *
-     * @return {{ Form.getFullName() }}
-     */
-    protected function getFilterForm()
-    {
-        $form = new {{ Form }}();
-        $submit = new Zend_Form_Element_Submit("send");
-        $submit->setLabel("Buscar");
         $form->addElement($submit)->setMethod('post');
         $form->twitterDecorators();
         return $form;
