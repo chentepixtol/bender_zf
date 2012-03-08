@@ -97,11 +97,36 @@ class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ Abs
 
 {% set statusField = fields.getByColumnName('/status/i') %}
     /**
+     * @return string
+     */
+    public function {{ statusField.getter }}Name(){
+        return array_search($this->{{ statusField.getter}}(), self::${{ statusField.getName().toUpperCamelCase() }});
+    }
+  
+    /**
      * @staticvar array
      */
     public static ${{ statusField.getName().toUpperCamelCase() }} = array(
         'Active' => 1,
         'Inactive' => 2,
+    );
+{% endif %}
+{% if fields.hasColumnName('/event_type/i') %}
+
+    /**
+     * @return string
+     */
+    public function getEventTypeName(){
+        return array_search($this->getEventType(), self::$EventTypes);
+    }
+
+    /**
+     * @staticvar array
+     */
+    public static $EventTypes = array(
+        'Create' => 1,
+        'Update' => 2,
+        'Delete' => 3,
     );
 {% endif %}
 

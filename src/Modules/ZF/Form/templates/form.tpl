@@ -50,8 +50,13 @@ class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form'
         $element = new \Zend_Form_Element_Select('{{ field.getName().toUnderscore() }}');
         $options = \{{ classes.get(foreignKey.getForeignTable.getObject() ~ 'Query').getFullname() }}::create()->find()->toCombo();
         $element->addMultiOptions($options);
+{% elseif field.isBoolean %}
+        $element = new \Zend_Form_Element_Checkbox('{{ field.getName().toUnderscore() }}');
 {% else %}
         $element = new {{ ElementText }}('{{ field.getName().toUnderscore() }}');
+{% endif %}
+{% if field.isDate or field.isDatetime %}
+        $element->setAttrib('class', 'datepicker');
 {% endif %}
         $element->setLabel($this->getTranslator()->_('{{ field.getName().toUpperCamelCase() }}'));
         $element->addValidator($this->validator->getFor('{{ field.getName() }}'));

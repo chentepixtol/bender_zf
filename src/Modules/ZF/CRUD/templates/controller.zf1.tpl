@@ -1,10 +1,24 @@
 {% include 'header.tpl' %}
 {% set slug = Controller.getName().toSlug('newString').replace('-controller','') %}
+{% set logger = classes.get(table.getOptions().get('crud_logger')) %}
+{% set loggerFactory = classes.get(table.getOptions().get('crud_logger')~'Factory') %}
+{% set loggerCatalog = classes.get(table.getOptions().get('crud_logger')~'Catalog') %}
+{% set loggerQuery = classes.get(table.getOptions().get('crud_logger')~'Query') %}
+{% set UserQuery = classes.get('UserQuery') %}
 {{ Catalog.printUse() }}
 {{ Factory.printUse() }}
 {{ Bean.printUse() }}
 {{ Query.printUse() }}
 {{ Form.printUse() }}
+{% if table.getOptions().has('crud_logger') %}
+{{ logger.printUse }}
+{{ loggerFactory.printUse }}
+{{ loggerCatalog.printUse }}
+{{ loggerQuery.printUse }}
+{% if UserQuery != Query %}
+{{ UserQuery.printUse }}
+{% endif %}
+{% endif %}
 use Application\Controller\CrudController;
 
 /**
@@ -187,16 +201,23 @@ class {{ Controller }} extends CrudController
         $this->_redirect('{{ slug }}/list');
     }
 {% if table.getOptions().has('crud_logger') %}
-{% set logger = classes.get(table.getOptions().get('crud_logger')) %}
-{% set loggerFactory = classes.get(table.getOptions().get('crud_logger')~'Factory') %}
-{% set loggerCatalog = classes.get(table.getOptions().get('crud_logger')~'Catalog') %}
+
+    /** 
+     *
+     */
+    protected function trackingAction(){
+        $id = $this->getRequest()->getParam('id');
+        ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
+        $this->view->{{ logger.getName().pluralize() }} = {{ loggerQuery }}::create()->whereAdd('{{ primaryKey }}', $id)->find();
+        $this->view->users = UserQuery::create()->find()->toCombo();
+    }
 
     /**
      * @param {{ Bean }} ${{ bean }}
      * @return \{{ logger.getFullname() }}
      */
     protected function newLogForCreate({{ Bean }} ${{ bean }}){
-        throw new Exception("No implementado aun");
+        return $this->newLog(${{ bean }}, \{{ logger.getFullname() }}::$EventTypes['Create'] );
     }
 
     /**
@@ -204,7 +225,7 @@ class {{ Controller }} extends CrudController
      * @return \{{ logger.getFullname() }}
      */
     protected function newLogForUpdate({{ Bean }} ${{ bean }}){
-        throw new Exception("No implementado aun");
+        return $this->newLog(${{ bean }}, \{{ logger.getFullname() }}::$EventTypes['Update'] );
     }
 
     /**
@@ -212,7 +233,23 @@ class {{ Controller }} extends CrudController
      * @return \{{ logger.getFullname() }}
      */
     protected function newLogForDelete({{ Bean }} ${{ bean }}){
-        throw new Exception("No implementado aun");
+        return $this->newLog(${{ bean }}, {{ logger }}::$EventTypes['Delete'] );
+    }
+    
+    /**
+     * @return \{{ logger.getFullname() }}
+     */
+    private function newLog({{ Bean }} ${{ bean }}, $eventType){
+        $now = \Zend_Date::now();
+        $log = {{ loggerFactory }}::createFromArray(array(
+            '{{ primaryKey }}' => ${{ bean }}->{{ primaryKey.getter }}(),
+            'id_user' => $this->getUser()->getBean()->getIdUser(),
+            'date_log' => $now->get('yyyy-MM-dd HH:mm:ss'),
+            'event_type' => $eventType,
+            'note' => '',
+        ));
+        $this->getCatalog('{{ loggerCatalog }}')->create($log);
+        return $log;
     }
 {% endif %}
     /**

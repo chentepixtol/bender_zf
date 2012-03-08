@@ -89,11 +89,17 @@ class CRUD extends BaseModule
         $tplDirectory = 'application/views/'.str_replace('-controller', '', $controllerName->toSlug());
         $controllerFile = 'application/controllers/' . $controllerName->toString() .'.php';
 
-        return array(
+        $files = array(
             new File($controllerFile, $this->getView()->fetch('controller.zf1.tpl')),
             new File($tplDirectory.'/List.tpl', $this->getView()->fetch('list.zf1.tpl')),
             new File($tplDirectory.'/New.tpl', $this->getView()->fetch('new.zf1.tpl')),
         );
+
+        if( $table->getOptions()->has('crud_logger') ){
+            $files[] = new File($tplDirectory.'/Tracking.tpl', $this->getView()->fetch('tracking.zf1.tpl'));
+        }
+
+        return $files;
     }
 
 }

@@ -13,11 +13,11 @@ use Query\Query;
 {% endif %}
 
 /**
- * {{ Query }}
+ * {{ Query.getFullname() }}
  *
- * @method {{ Query }} pk() pk(int $primaryKey)
- * @method {{ Query }} useMemoryCache()
- * @method {{ Query }} useFileCache()
+ * @method {{ Query.getFullname() }} pk() pk(int $primaryKey)
+ * @method {{ Query.getFullname() }} useMemoryCache()
+ * @method {{ Query.getFullname() }} useFileCache()
  * @method \{{ Collection.getFullName() }} find()
  * @method \{{ Bean.getFullName() }} findOne()
  * @method \{{ Bean.getFullName() }} findOneOrElse() findOneOrElse({{ Bean }} $alternative)
@@ -25,38 +25,38 @@ use Query\Query;
  * @method \{{ Bean.getFullName() }} findByPK() findByPK($pk)
  * @method \{{ Bean.getFullName() }} findByPKOrElse() findByPKOrElse($pk, {{ Bean }} $alternative)
  * @method \{{ Bean.getFullName() }} findByPKOrThrow() findByPKOrThrow($pk, $message)
- * @method {{ Query }} create() create(QuoteStrategy $quoteStrategy = null)
+ * @method {{ Query.getFullname() }} create() create(QuoteStrategy $quoteStrategy = null)
  * @method \Query\Criteria joinOn() joinOn($table, $type = null, $alias = null)
- * @method {{ Query }} joinUsing() joinUsing($table, $usingColumn, $type = null, $alias = null)
+ * @method {{ Query.getFullname() }} joinUsing() joinUsing($table, $usingColumn, $type = null, $alias = null)
  * @method \Query\Criteria innerJoinOn() innerJoinOn($table, $alias = null)
- * @method {{ Query }} innerJoinUsing() innerJoinUsing($table, $usingColumn, $alias = null)
+ * @method {{ Query.getFullname() }} innerJoinUsing() innerJoinUsing($table, $usingColumn, $alias = null)
  * @method \Query\Criteria leftJoinOn() leftJoinOn($table, $alias = null)
- * @method {{ Query }} leftJoinUsing() leftJoinUsing($table, $usingColumn, $alias = null)
+ * @method {{ Query.getFullname() }} leftJoinUsing() leftJoinUsing($table, $usingColumn, $alias = null)
  * @method \Query\Criteria rigthJoinOn() rigthJoinOn($table, $alias = null)
- * @method {{ Query }} rigthJoinUsing() rigthJoinUsing($table, $usingColumn, $alias = null)
- * @method {{ Query }} removeJoins()
- * @method {{ Query }} removeJoin() removeJoin($table)
- * @method {{ Query }} from() from($table, $alias = null)
- * @method {{ Query }} removeFrom() removeFrom($from = null)
+ * @method {{ Query.getFullname() }} rigthJoinUsing() rigthJoinUsing($table, $usingColumn, $alias = null)
+ * @method {{ Query.getFullname() }} removeJoins()
+ * @method {{ Query.getFullname() }} removeJoin() removeJoin($table)
+ * @method {{ Query.getFullname() }} from() from($table, $alias = null)
+ * @method {{ Query.getFullname() }} removeFrom() removeFrom($from = null)
  * @method \Query\Criteria where()
  * @method \Query\Criteria having()
- * @method {{ Query }} whereAdd() $column, $value, $comparison = null, $mutatorColumn = null, $mutatorValue = null)
- * @method {{ Query }} bind() bind($parameters)
- * @method {{ Query }} setQuoteStrategy() setQuoteStrategy(QuoteStrategy $quoteStrategy)
- * @method {{ Query }} page() page($page, $itemsPerPage)
- * @method {{ Query }} setLimit() setLimit($limit)
- * @method {{ Query }} setOffset() setOffset($offset)
- * @method {{ Query }} removeColumn() removeColumn($column = null)
- * @method {{ Query }} distinct()
- * @method {{ Query }} select()
- * @method {{ Query }} addColumns() addColumns($columns)
- * @method {{ Query }} addColumn() addColumn($column, $alias = null, $mutator = null)
- * @method {{ Query }} addGroupBy() addGroupBy($groupBy)
- * @method {{ Query }} orderBy() orderBy($name, $type = null)
- * @method {{ Query }} intoOutfile() intoOutfile($filename, $terminated = ',', $enclosed = '"', $escaped = '\\\\', $linesTerminated ='\r\n')
- * @method {{ Query }} addAscendingOrderBy() addAscendingOrderBy($name)
- * @method {{ Query }} addDescendingOrderBy() addDescendingOrderBy($name)
- * @method {{ Query }} setDefaultColumn() setDefaultColumn($defaultColumn)
+ * @method {{ Query.getFullname() }} whereAdd() $column, $value, $comparison = null, $mutatorColumn = null, $mutatorValue = null)
+ * @method {{ Query.getFullname() }} bind() bind($parameters)
+ * @method {{ Query.getFullname() }} setQuoteStrategy() setQuoteStrategy(QuoteStrategy $quoteStrategy)
+ * @method {{ Query.getFullname() }} page() page($page, $itemsPerPage)
+ * @method {{ Query.getFullname() }} setLimit() setLimit($limit)
+ * @method {{ Query.getFullname() }} setOffset() setOffset($offset)
+ * @method {{ Query.getFullname() }} removeColumn() removeColumn($column = null)
+ * @method {{ Query.getFullname() }} distinct()
+ * @method {{ Query.getFullname() }} select()
+ * @method {{ Query.getFullname() }} addColumns() addColumns($columns)
+ * @method {{ Query.getFullname() }} addColumn() addColumn($column, $alias = null, $mutator = null)
+ * @method {{ Query.getFullname() }} addGroupBy() addGroupBy($groupBy)
+ * @method {{ Query.getFullname() }} orderBy() orderBy($name, $type = null)
+ * @method {{ Query.getFullname() }} intoOutfile() intoOutfile($filename, $terminated = ',', $enclosed = '"', $escaped = '\\\\', $linesTerminated ='\r\n')
+ * @method {{ Query.getFullname() }} addAscendingOrderBy() addAscendingOrderBy($name)
+ * @method {{ Query.getFullname() }} addDescendingOrderBy() addDescendingOrderBy($name)
+ * @method {{ Query.getFullname() }} setDefaultColumn() setDefaultColumn($defaultColumn)
  */
 class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ BaseQuery }}{% endif %}
 {
@@ -99,7 +99,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 
     /**
      * @param mixed $value
-     * @return {{ Query }}
+     * @return {{ Query.getFullname() }}
      */
     public function pk($value){
         $this->filter(array(
@@ -120,7 +120,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
      * build fromArray
      * @param array $fields
      * @param string $prefix
-     * @return {{ Query }}
+     * @return {{ Query.getFullname() }}
      */
     public function filter($fields, $prefix = '{{ Bean }}'){
         $this->build($this, $fields, $prefix);
@@ -156,7 +156,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     /**
      * @param string $alias
      * @param string aliasForeignTable
-     * @return {{ Query }}
+     * @return {{ Query.getFullname() }}
      */
     public function innerJoin{{ classForeign }}($alias = '{{ Bean }}', $aliasForeignTable = '{{ classForeign }}')
     {
@@ -179,7 +179,7 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     /**
      * @param string $alias
      * @param string aliasForeignTable
-     * @return {{ Query }}
+     * @return {{ Query.getFullname() }}
      */
     public function innerJoin{{ classForeign }}($alias = '{{ Bean }}', $aliasForeignTable = '{{ classForeign }}')
     {
