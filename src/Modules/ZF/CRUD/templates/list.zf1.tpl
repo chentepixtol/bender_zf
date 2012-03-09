@@ -1,37 +1,37 @@
 {% set slug = Controller.getName().toSlug('newString').replace('-controller','') %}
 {% set statusField = fields.getByColumnName('/status/i') %}
 
-<table>
-    <tbody>
+<form method="POST" action="">
+    <table>
+        <tbody class="actions">
 {% for foreignKey in fullForeignKeys %}
 {% set classForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()) %}
 {% set field = foreignKey.getLocal %}
-   <td>{$i18n->_('{{ field }}')}</td>
-   <td>{html_options name={{ field }} id={{ field }} options=${{ classForeign.getName().pluralize() }} selected=$post['{{ field }}']}</td>
+            <td>{$i18n->_('{{ field }}')}</td>
+            <td>{html_options name={{ field }} id={{ field }} options=${{ classForeign.getName().pluralize() }} selected=$post['{{ field }}']}</td>
 {% endfor %}
 {% for field in fullFields.nonForeignKeys() %}
-{% if field.isBigint or field.isInteger or field.isSmallint %}
-   <td>{$i18n->_('{{ field }}')}</td>
-   <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="number{% if field.isRequired() == true %} required{% endif %}" /></td>
-{% elseif field.isText %}
-    <td>{$i18n->_('{{ field }}')}</td>
-    <td><textarea name="{{ field }}" id="{{ field }}" class="{% if field.isRequired() == true %} required{% endif %}">{$post['{{ field }}']}</textarea></td>
+{% if field.isText %}
+            <td>{$i18n->_('{{ field }}')}</td>
+            <td><textarea name="{{ field }}" id="{{ field }}" >{$post['{{ field }}']}</textarea></td>
 {% elseif field.isDate or field.isDatetime %}
-    <td>{$i18n->_('{{ field }}')}</td>
-    <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="datePicker dateISO{% if field.isRequired() == true %} required{% endif %}" /></td>
+            <td>{$i18n->_('{{ field }}')}</td>
+            <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="datePicker dateISO span2" /></td>
 {% elseif field.isBoolean %}
-    <td>{$i18n->_('{{ field }}')}</td>
-    <td><input type="checkbox" name="{{ field }}" id="{{ field }}" value="1" class="{% if field.isRequired() == true %} required{% endif %}" {if $post['{{ field }}']}checked="checked"{/if} /></td>
+            <td>{$i18n->_('{{ field }}')}</td>
+            <td><input type="checkbox" name="{{ field }}" id="{{ field }}" value="1" {if $post['{{ field }}']}checked="checked"{/if} /></td>
 {% elseif field.isTime %}
-    <td>{$i18n->_('{{ field }}')}</td>
-    <td>{html_select_time prefix={{ field }} display_seconds=false display_meridian=false time=$post['{{ field }}']}</td>
+            <td>{$i18n->_('{{ field }}')}</td>
+            <td>{html_select_time prefix={{ field }} display_seconds=false display_meridian=false time=$post['{{ field }}']}</td>
 {% else %}
-    <td>{$i18n->_('{{ field }}')}</td>
-    <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="{% if field.isRequired() == true %} required{% endif %}" /></td>
+            <td>{$i18n->_('{{ field }}')}</td>
+            <td><input type="text" name="{{ field }}" id="{{ field }}" value="{$post['{{ field }}']}" class="span3" /></td>
 {% endif %}
 {% endfor %}    
-    </tbody>
-</table>
+            <th><input type="submit" class="btn primary" value="Filter" /></th>
+        </tbody>
+    </table>
+</form>
 
     <table class="zebra-striped bordered-table">
         <caption><h3>{$i18n->_('{{ Bean }}')}</h3></caption>
