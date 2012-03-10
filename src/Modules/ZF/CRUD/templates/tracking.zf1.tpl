@@ -10,9 +10,10 @@
             </tr>
         </thead>
         <tbody>
-            {foreach ${{ logger.getName().pluralize() }} as $i => $log}
+            {$i = 1}
+            {foreach ${{ logger.getName().pluralize() }} as $log}
                 <tr>
-                     <td>{$i}</td>
+                     <td>{$i++}</td>
                      <td>{$users[$log->getIdUser()]}</td>
                      <td>{$i18n->_($log->getEventTypeName())}</td>
                      <td>{$log->getDateLog()}</td> 

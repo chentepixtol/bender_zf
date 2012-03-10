@@ -2,6 +2,7 @@
 {% set statusField = fields.getByColumnName('/status/i') %}
 
 <form method="POST" action="">
+    <input type="hidden" name="page" id="page" value="{$page|default:1}" />
     <table>
         <tbody class="actions">
 {% for foreignKey in fullForeignKeys %}
@@ -58,7 +59,13 @@
 {% endif %}
 {% endfor %}
                     <td><a href="{$baseUrl}/{{slug}}/edit/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Edit')}</a></td>
-                    <td><a href="{$baseUrl}/{{slug}}/delete/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Delete')}</a></td>
+                    <td>
+                    {if ${{ bean }}->isActive() }
+                        <a href="{$baseUrl}/{{slug}}/delete/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Deactivate')}</a>
+                    {else}
+                        <a href="{$baseUrl}/{{slug}}/reactivate/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Reactivate')}</a>
+                    {/if}
+                    </td>
 {% if table.getOptions().has('crud_logger') %}
                     <td><a href="{$baseUrl}/{{slug}}/tracking/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Tracking')}</a></td>
 {% endif %}

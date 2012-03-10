@@ -110,6 +110,20 @@ class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ Abs
         'Active' => 1,
         'Inactive' => 2,
     );
+    
+    /**
+     * @return boolean
+     */
+    public function isActive(){
+        return $this->getStatus() == self::$Status['Active'];
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isInactive(){
+        return $this->getStatus() == self::$Status['Inactive'];
+    }
 {% endif %}
 {% if fields.hasColumnName('/event_type/i') %}
 
@@ -127,6 +141,7 @@ class {{ Bean }} extends {% if parent %}{{ parent.getObject() }}{% else %}{{ Abs
         'Create' => 1,
         'Update' => 2,
         'Delete' => 3,
+        'Reactivate' => 4,
     );
 {% endif %}
 

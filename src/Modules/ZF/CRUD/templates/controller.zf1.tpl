@@ -42,7 +42,7 @@ class {{ Controller }} extends CrudController
      */
     public function listAction()
     {
-        $page = $this->getRequest()->getParam('page', 1);
+        $this->view->page = $page = $this->getRequest()->getParam('page') ?: 1;
 
         if( $this->getRequest()->isPost() ){
             $this->view->post = $post = $this->getRequest()->getParams();
@@ -199,6 +199,37 @@ class {{ Controller }} extends CrudController
         }
         $this->_redirect('{{ slug }}/list');
     }
+    
+    /**
+     *
+     */
+    public function reactivateAction(){
+        $id = $this->getRequest()->getParam('id');
+        ${{ bean }} = {{ Query }}::create()->findByPKOrThrow($id, $this->i18n->_("Not exists the {{ Bean }} with id {$id}"));
+
+        try
+        {
+            $this->get{{ Catalog }}()->beginTransaction();
+
+{% if fields.hasColumnName('/status/i') %}
+{% set statusField = fields.getByColumnName('/status/i') %}
+            ${{ bean }}->{{ statusField.setter }}({{ Bean }}::${{ statusField.getName().toUpperCamelCase }}['Active']);
+{% endif %}
+            $this->get{{ Catalog }}()->update(${{ bean }});
+{% if table.getOptions().has('crud_logger') %}
+            $this->newLogForReactivate(${{ bean }});
+{% endif %}
+
+            $this->get{{ Catalog }}()->commit();
+            $this->setFlash('ok', $this->i18n->_("Se reactivo correctamente el {{ Bean}}"));
+        }
+        catch(Exception $e)
+        {
+            $this->get{{ Catalog }}()->rollBack();
+            $this->setFlash('error', $this->i18n->_($e->getMessage()));
+        }
+        $this->_redirect('{{ slug }}/list');
+    }
 {% if table.getOptions().has('crud_logger') %}
 
     /** 
@@ -233,6 +264,14 @@ class {{ Controller }} extends CrudController
      */
     protected function newLogForDelete({{ Bean }} ${{ bean }}){
         return $this->newLog(${{ bean }}, {{ logger }}::$EventTypes['Delete'] );
+    }
+    
+    /**
+     * @param {{ Bean }} ${{ bean }}
+     * @return \{{ logger.getFullname() }}
+     */
+    protected function newLogForReactivate({{ Bean }} ${{ bean }}){
+        return $this->newLog(${{ bean }}, {{ logger }}::$EventTypes['Reactivate'] );
     }
     
     /**
