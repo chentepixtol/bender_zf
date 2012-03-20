@@ -40,7 +40,7 @@ use Query\Query;
  * @method \{{ Query.getFullname() }} removeFrom() removeFrom($from = null)
  * @method \Query\Criteria where()
  * @method \Query\Criteria having()
- * @method \{{ Query.getFullname() }} whereAdd() $column, $value, $comparison = null, $mutatorColumn = null, $mutatorValue = null)
+ * @method \{{ Query.getFullname() }} whereAdd() whereAdd($column, $value, $comparison = null, $mutatorColumn = null, $mutatorValue = null)
  * @method \{{ Query.getFullname() }} bind() bind($parameters)
  * @method \{{ Query.getFullname() }} setQuoteStrategy() setQuoteStrategy(QuoteStrategy $quoteStrategy)
  * @method \{{ Query.getFullname() }} page() page($page, $itemsPerPage)
@@ -150,6 +150,27 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 
         $criteria->endPrefix();
     }
+{% if table.getOptions.has('crud') and fields.hasColumnName('/status/i') %}
+{% set statusField = fields.getByColumnName('/status/i') %}
+
+    /**
+     * @return \{{ Query.getFullname() }}
+     */
+    public function actives(){
+        return $this->filter(array(
+            {{ Bean }}::{{ statusField.getName().toUpperCase() }} => {{ Bean }}::$Status['Active'],
+        ));
+    }
+    
+    /**
+     * @return \{{ Query.getFullname() }}
+     */
+    public function inactives(){
+        return $this->filter(array(
+            {{ Bean }}::{{ statusField.getName().toUpperCase() }} => {{ Bean }}::$Status['Inactive'],
+        ));
+    }
+{% endif %}
 
 {% for foreignKey in foreignKeys %}
 {% set classForeign = classes.get(foreignKey.getForeignTable().getObject().toUpperCamelCase()) %}

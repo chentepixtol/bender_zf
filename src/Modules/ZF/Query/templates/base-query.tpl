@@ -80,6 +80,7 @@ abstract class {{ BaseQuery }} extends Query
      * @return \{{ classes.get('Bean').getFullName() }}
      */
     public function findByPK($pk){
+        $this->validatePK($pk);
         return $this->pk($pk)->findOne();
     }
 
@@ -120,6 +121,7 @@ abstract class {{ BaseQuery }} extends Query
      * @return \{{ Option.getFullName() }}
      */
     public function findOptionByPK($pk){
+        $this->validatePK($pk);
         return $this->pk($pk)->findOneOption();
     }
 
@@ -190,4 +192,12 @@ abstract class {{ BaseQuery }} extends Query
         return $this->storage;
     }
 
+    /**
+     * @param mixed $pk
+     */
+    private function validatePK($pk){
+        if( empty($pk) ){
+            throw new \Exception("No es proporcionada la llave primaria");
+        }
+    }
 }
