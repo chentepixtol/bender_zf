@@ -41,7 +41,7 @@
 {% for field in fullFields %}
                 <th>{$i18n->_('{{ field.getName().toUpperCamelCase() }}')}</th>
 {% endfor %}
-                <th colspan="3">{$i18n->_('Actions')}</th>
+                <th>{$i18n->_('Actions')}</th>
             </tr>
         </thead>
         <tbody>
