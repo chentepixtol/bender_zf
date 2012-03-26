@@ -58,17 +58,17 @@
                     <td>{${{ bean }}->{{ field.getter() }}()}</td>
 {% endif %}
 {% endfor %}
-                    <td><a href="{$baseUrl}/{{slug}}/edit/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Edit')}</a></td>
                     <td>
+                        <a href="{$baseUrl}/{{slug}}/edit/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{icon class=tip src=pencil title=$i18n->_('Edit')}</a>
                     {if ${{ bean }}->isActive() }
-                        <a href="{$baseUrl}/{{slug}}/delete/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Deactivate')}</a>
+                        <a href="{$baseUrl}/{{slug}}/delete/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{icon class=tip src=delete title=$i18n->_('Deactivate')}</a>
                     {else}
-                        <a href="{$baseUrl}/{{slug}}/reactivate/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Reactivate')}</a>
+                        <a href="{$baseUrl}/{{slug}}/reactivate/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{icon class=tip src=tick title=$i18n->_('Reactivate')}</a>
                     {/if}
-                    </td>
 {% if table.getOptions().has('crud_logger') %}
-                    <td><a href="{$baseUrl}/{{slug}}/tracking/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{$i18n->_('Tracking')}</a></td>
+                        <a href="{$baseUrl}/{{slug}}/tracking/id/{${{ bean }}->{{table.getPrimaryKey().getter()}}()}" class="btn">{icon class=tip src=book_open title=$i18n->_('Tracking')}</a>
 {% endif %}
+                    </td>
                 </tr>
             {/foreach}
         </tbody>
