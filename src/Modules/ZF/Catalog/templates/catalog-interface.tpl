@@ -39,6 +39,11 @@ interface {{ Catalog }}
      * @param {{ Bean }} Un bean para actualizar
      */
     public function update($object);
+    
+    /**
+     * @param {{ Bean }} $object
+     */
+    public function save($object);
 
     /**
      * Elimina de la base de datos por medio de llave primaria

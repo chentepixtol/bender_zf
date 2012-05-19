@@ -9,6 +9,7 @@
 
 use Query\Query;
 {{ Storage.printUse() }}
+{{ FactoryStorage.printUse() }}
 {{ Option.printUse() }}
 
 /**
@@ -24,6 +25,12 @@ abstract class {{ BaseQuery }} extends Query
      *
      */
     protected $storage = null;
+
+    /**
+     *
+     * @var \Query\QuoteStrategy
+     */
+    private static $zendDbStrategy = null;
 
     /**
      * @abstract
@@ -44,10 +51,31 @@ abstract class {{ BaseQuery }} extends Query
     abstract public function fetchIds();
 
     /**
+     *
+     * @param \Query\QuoteStrategy $quoteStrategy
+     */
+    public function __construct(\Query\QuoteStrategy $quoteStrategy = null){
+        if( $quoteStrategy == null ){
+            $quoteStrategy = self::getZendDbQuoteStrategy();
+        }
+        parent::__construct($quoteStrategy);
+    }
+
+    /**
+     * @return \Query\QuoteStrategy
+     */
+    public static function getZendDbQuoteStrategy(){
+        if( null == self::$zendDbStrategy ){
+            self::$zendDbStrategy = new \Query\ZendDbQuoteStrategy(self::getDBAdapter());
+        }
+        return self::$zendDbStrategy;
+    }
+
+    /**
      * @return {{ BaseQuery }}
      */
     public function useMemoryCache(){
-       $this->setStorage(\{{ FactoryStorage.getFullName() }}::create('memory'));
+       $this->setStorage({{ FactoryStorage }}::create('memory'));
        return $this;
     }
 
@@ -55,7 +83,15 @@ abstract class {{ BaseQuery }} extends Query
      * @return {{ BaseQuery }}
      */
     public function useFileCache(){
-       $this->setStorage(\{{ FactoryStorage.getFullName() }}::create('file'));
+       $this->setStorage({{ FactoryStorage }}::create('file'));
+       return $this;
+    }
+
+    /**
+     * @return {{ BaseQuery }}
+     */
+    public function notCache(){
+       $this->setStorage({{ FactoryStorage }}::create('null'));
        return $this;
     }
 
@@ -200,4 +236,12 @@ abstract class {{ BaseQuery }} extends Query
             throw new \Exception("No es proporcionada la llave primaria");
         }
     }
+    
+    /**
+     *
+     */
+    private static function getDBAdapter(){
+        return \Zend_Registry::get('container')->get('dbao')->getDbAdapter();
+    }
+    
 }

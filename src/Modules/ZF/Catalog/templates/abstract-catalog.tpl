@@ -256,7 +256,7 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
                 $storage->save($sql, $resultset);
             }
         }catch(\Exception $e){
-            $this->throwException("Cant execute query \n", $e);
+            $this->throwException("Cant execute query << {$sql} >>\n", $e);
         }
 
         return $resultset;

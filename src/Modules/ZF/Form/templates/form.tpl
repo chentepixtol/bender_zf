@@ -4,6 +4,7 @@
 
 {{ Validator.printUse() }}
 {{ Filter.printUse() }}
+{{ Bean.printUse() }}
 
 {% if isZF2 %}
 use Zend\Form\Element;
@@ -21,6 +22,42 @@ use \Zend_Form_Element_Text as ElementText;
  */
 class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form') }}{% else %}{{ BaseForm }}{% endif %}
 {
+
+    /**
+     *
+     * @var {{ Bean }}
+     */
+    private ${{ bean }};
+
+    /**
+     *
+     * @param {{ Bean }} ${{ bean }}
+     */
+    public function set{{ Bean }}({{ Bean }} ${{ bean }}){
+        $this->{{ bean }} = ${{ bean }};
+    }
+
+    /**
+     *
+     * @return {{ Bean }}
+     */
+    public function get{{ Bean }}(){
+        return $this->{{ bean }};
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEdit(){
+        return $this->{{ bean }} instanceof {{ Bean }};
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function isNew(){
+        return !$this->isEdit();
+    }
 
     /**
      * init

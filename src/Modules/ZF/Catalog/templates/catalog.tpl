@@ -78,6 +78,18 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             $this->throwException("The {{ Bean }} can't be saved \n", $e);
         }
     }
+    
+    /**
+     * @param {{ Bean }} ${{ bean }}
+     */
+    public function save(${{ bean }}){
+        $this->validateBean(${{ bean }});
+        if( ${{ bean }}->{{ table.getPrimaryKey().getter() }}() ){
+            $this->update(${{ bean }});
+        }else{
+            $this->create(${{ bean }});
+        }
+    }
 
     /**
      * Metodo para eliminar un {{ Bean }} a partir de su Id

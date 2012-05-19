@@ -38,7 +38,8 @@ class {{ BaseForm }} extends {% if isZF2 %}TwitterForm{% else %}\ZFriendly\Form\
      */
     public function init(){
         parent::init();
-        $this->setView(new ZendView());
+        $view = \Zend_Registry::getInstance()->get('container')->get('zend_smarty');
+        $this->setView($view);
     }
 
     /**
