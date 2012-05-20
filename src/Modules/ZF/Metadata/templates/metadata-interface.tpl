@@ -19,6 +19,8 @@ interface {{ MetadataInterface }}
     
     public static function getTablename();
     
+    public static function getEntityName();
+    
     public static function getFields();
     
     public static function getPrimaryKey();

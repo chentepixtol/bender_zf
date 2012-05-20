@@ -37,7 +37,16 @@ abstract class {{ BaseQuery }} extends Query
      * @abstract
      * @return \{{ classes.get('Metadata').getFullName() }}
      */
-    abstract protected function getMetadata();
+    abstract protected static function getMetadata();
+    
+    /**
+     * initialization
+     */
+    protected function init()
+    {
+        $this->from($this->getMetadata()->getTablename(), $this->getMetadata()->getEntityName());
+        $this->setDefaultColumn($this->getMetadata()->getEntityName() . ".*");
+    }
 
      /**
      * @param mixed $value
@@ -56,6 +65,37 @@ abstract class {{ BaseQuery }} extends Query
     public function fetchIds(){
        $this->removeColumn()->addColumn($this->getMetadata()->getPrimaryKey(), 'ids');
        return $this->fetchCol();
+    }
+    
+    /**
+     * build fromArray
+     * @param array $fields
+     * @param string $prefix
+     * @return {{ BaseQuery }}
+     */
+    public function filter($fields, $prefix = null){
+        $this->build($this, $fields, $prefix ?: $this->getMetadata()->getEntityName());
+        return $this;
+    }
+    
+    /**
+     * build fromArray
+     * @param Query $query
+     * @param array $fields
+     * @param string $prefix
+     */
+    public static function build(Query $query, $fields, $prefix = null)
+    {
+        $criteria = $query->where();
+        $criteria->prefix($prefix ?: static::getMetadata()->getEntityName());
+
+        foreach(static::getMetadata()->getFields() as $field){
+            if( isset($fields[$field]) && !empty($fields[$field]) ){
+                $criteria->add($field, $fields[$field]);
+            }
+        }
+
+        $criteria->endPrefix();
     }
 
     /**

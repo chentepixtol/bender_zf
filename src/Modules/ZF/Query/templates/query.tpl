@@ -50,6 +50,7 @@ use Query\Query;
  * @method \{{ Query.getFullname() }} distinct()
  * @method \{{ Query.getFullname() }} select()
  * @method \{{ Query.getFullname() }} pk() pk($id)
+ * @method \{{ Query.getFullname() }} filter() filter($fields, $prefix = null)
  * @method \{{ Query.getFullname() }} addColumns() addColumns($columns)
  * @method \{{ Query.getFullname() }} addColumn() addColumn($column, $alias = null, $mutator = null)
  * @method \{{ Query.getFullname() }} addGroupBy() addGroupBy($groupBy)
@@ -65,10 +66,11 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
     /**
      * @return \{{ Metadata.getFullname() }}
      */
-    protected function getMetadata(){
+    protected static function getMetadata(){
         return {{ Metadata }}::getInstance();
     }
 
+{% if table.isInheritance %}
     /**
      * initialization
      */
@@ -96,18 +98,9 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 {% endfor %}
         $this->setDefaultColumn($defaultColumn);
     }
+{% endif %}
 
-    /**
-     * build fromArray
-     * @param array $fields
-     * @param string $prefix
-     * @return {{ Query.getFullname() }}
-     */
-    public function filter($fields, $prefix = '{{ Bean }}'){
-        $this->build($this, $fields, $prefix);
-        return $this;
-    }
-
+{% if table.isInheritance %}
     /**
      * build fromArray
      * @param Query $query
@@ -119,18 +112,18 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 {% if parent %}
         parent::build($query, $fields);
 {% endif %}
-
         $criteria = $query->where();
         $criteria->prefix($prefix);
 
-{% for field in fields %}
-        if( isset($fields['{{ field }}']) && !empty($fields['{{ field }}']) ){
-            $criteria->add({{ Bean }}::{{ field.getName().toUpperCase() }}, $fields['{{ field }}']);
+        foreach(self::getMetadata()->getFields() as $field){
+            if( isset($fields[$field]) && !empty($fields[$field]) ){
+                $criteria->add($field, $fields[$field]);
+            }
         }
-{% endfor %}
 
         $criteria->endPrefix();
     }
+{% endif %}
 {% if table.getOptions.has('crud') and fields.hasColumnName('/status/i') %}
 {% set statusField = fields.getByColumnName('/status/i') %}
 

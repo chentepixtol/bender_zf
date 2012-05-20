@@ -55,6 +55,13 @@ class {{ Metadata }} extends {{ AbstractMetadata }}
     }
     
     /**
+     * @return string
+     */
+    public static function getEntityName(){
+        return '{{ Bean }}';
+    }
+    
+    /**
      * @return array
      */
     public static function getFields(){
