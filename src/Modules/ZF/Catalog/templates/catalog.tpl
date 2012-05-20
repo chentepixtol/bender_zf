@@ -78,35 +78,6 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             $this->throwException("The {{ Bean }} can't be saved \n", $e);
         }
     }
-    
-    /**
-     * @param {{ Bean }} ${{ bean }}
-     */
-    public function save(${{ bean }}){
-        $this->validateBean(${{ bean }});
-        if( ${{ bean }}->{{ table.getPrimaryKey().getter() }}() ){
-            $this->update(${{ bean }});
-        }else{
-            $this->create(${{ bean }});
-        }
-    }
-
-    /**
-     * Metodo para eliminar un {{ Bean }} a partir de su Id
-     * @param int ${{ primaryKey }}
-     */
-    public function deleteById(${{ primaryKey }})
-    {
-        try
-        {
-            $where = array($this->getDb()->quoteInto('{{ table.getPrimaryKey() }} = ?', ${{ primaryKey }}));
-            $this->getDb()->delete({{ Bean }}::TABLENAME, $where);
-        }
-        catch(\Exception $e)
-        {
-            $this->throwException("The {{ Bean }} can't be deleted\n", $e);
-        }
-    }
 
 {% for manyToMany in table.getManyToManyCollection %}
 {% set relationColumn = manyToMany.getRelationColumn() %}
@@ -193,25 +164,6 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
 
     /**
      *
-     * makeCollection
-     * @return \{{ Collection.getFullName() }}
-     */
-    protected function makeCollection(){
-        return new {{ Collection }}();
-    }
-
-    /**
-     *
-     * makeBean
-     * @param array $resultset
-     * @return \{{ Bean.getFullName() }}
-     */
-    protected function makeBean($resultset){
-        return {{ Factory }}::createFromArray($resultset);
-    }
-
-    /**
-     *
      * Validate Query
      * @param {{ Query }} $query
      * @throws RoundException
@@ -222,30 +174,12 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             $this->throwException("No es un Query valido");
         }
     }
-
+    
     /**
-     *
-     * Validate {{ Bean }}
-     * @param {{ Bean }} ${{ bean }}
-     * @throws Exception
+     * @return \{{ Metadata.getFullname }}
      */
-    protected function validateBean(${{ bean }} = null){
-        if( !(${{ bean }} instanceof {{ Bean }}) ){
-            $this->throwException("passed parameter isn't a {{ Bean }} instance");
-        }
-    }
-
-    /**
-     *
-     * throwException
-     * @throws Exception
-     */
-    protected function throwException($message, \Exception $exception = null){
-        if( null != $exception){
-            throw new {{ Exception }}("$message ". $exception->getMessage(), 500, $exception);
-        }else{
-            throw new {{ Exception }}($message);
-        }
+    protected function getMetadata(){
+        return \{{ Metadata.getFullname }}::getInstance();
     }
 
  }

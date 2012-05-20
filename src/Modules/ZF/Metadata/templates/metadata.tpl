@@ -40,7 +40,11 @@ class {{ Metadata }} extends {{ AbstractMetadata }}
      * @throws \{{ Exception.getFullname }}
      */
     public static function throwException($message, $previous){
-        throw new {{ Exception }}($message);
+        if( null != $exception){
+            throw new {{ Exception }}("{$message} ". $exception->getMessage(), 500, $exception);
+        }else{
+            throw new {{ Exception }}($message);
+        }
     }
     
     /**

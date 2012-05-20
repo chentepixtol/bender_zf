@@ -7,6 +7,7 @@
 {% set Storage = classes.get('Storage') %}
 {% set DBAO = classes.get('DBAO') %}
 {% set Bean = classes.get('Bean') %}
+{% set MetadataInterface = classes.get('Metadata') %}
 {% set bean = Bean.getName().toCamelCase() %}
 {{ AbstractCatalog.printNamespace() }}
 
@@ -21,41 +22,17 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
 {
 
     /**
+     * @return \{{ MetadataInterface.getFullname }}
+     */
+    abstract protected function getMetadata();
+
+    /**
      *
      * Validate Query
      * @param Query $query
      * @throws Exception
      */
     abstract protected function validateQuery(Query $query);
-
-    /**
-     *
-     * Validate {{ Bean }}
-     * @param {{ Bean }} ${{ bean }}
-     * @throws Exception
-     */
-    abstract protected function validateBean(${{ bean }} = null);
-
-    /**
-     *
-     * throwException
-     * @throws Exception
-     */
-    abstract protected function throwException($message, \Exception $exception = null);
-
-    /**
-     *
-     * makeCollection
-     * @return \{{ BaseCollection.getFullName() }}
-     */
-    abstract protected function makeCollection();
-
-    /**
-     *
-     * makeBean
-     * @return \{{ Bean.getFullName() }}
-     */
-    abstract protected function makeBean($resultset);
 
     /**
      * @var string $field
@@ -149,6 +126,33 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
             $this->getDb()->exec("ROLLBACK TO SAVEPOINT LEVEL".self::$transLevel);
         }
     }
+    
+     /**
+     * @param $bean
+     */
+    public function save($bean){
+        $this->validateBean($bean);
+        if( $bean->getIndex() ){
+            $this->update(${{ bean }});
+        }else{
+            $this->create(${{ bean }});
+        }
+    }
+    
+    /**
+     * @param int $id
+     */
+    public function deleteById($id)
+    {
+        try
+        {
+            $where = array($this->getDb()->quoteInto("{$this->getMetadata()->getPrimaryKey()} = ?", $id));
+            $this->getDb()->delete($this->getMetadata()->getTablename(), $where);
+        }
+        catch(\Exception $e){
+            $this->throwException("The object can't be deleted\n", $e);
+        }
+    }
 
     /**
      *
@@ -165,9 +169,9 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
             $collection = $storage->load($key);
             $collection->rewind();
         }else{
-            $collection = $this->makeCollection();
+            $collection = $this->getMetadata()->newCollection();
             foreach( $this->fetchAll($query, $storage) as $row ){
-                $collection->append($this->makeBean($row));
+                $collection->append($this->getMetadata()->newBean($row));
             }
             $storage->save($key, $collection);
         }
@@ -261,5 +265,24 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
 
         return $resultset;
     }
-
+    
+    /**
+     *
+     * Validate {{ Bean }}
+     * @param {{ Bean }} ${{ bean }}
+     * @throws Exception
+     */
+     protected function validateBean($bean = null){
+         $this->getMetadata()->checkBean($bean);
+     }
+    
+    /**
+     *
+     * throwException
+     * @throws Exception
+     */
+     protected function throwException($message, \Exception $exception = null){
+        $this->getMetadata()->throwException($message, $exception);
+     }
+     
 }

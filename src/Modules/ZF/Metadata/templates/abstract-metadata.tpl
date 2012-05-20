@@ -27,8 +27,8 @@ abstract class {{ AbstractMetadata }} implements {{ MetadataInterface }}
      * @throws {{ Exception }}
      */
     public static function checkBean($bean){
-        if( !self::isBean($bean) ){
-            self::throwException("The object not is a valid");
+        if( !static::isBean($bean) ){
+            static::throwException("The object not is a valid");
         }
     }
     
