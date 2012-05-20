@@ -25,6 +25,7 @@ use Query\Query;
 class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ 'Catalog') }}{% else %}{{ AbstractCatalog }} {% endif %}
 {
 
+{% if table.isInheritance %}
     /**
      * Metodo para agregar un {{ Bean }} a la base de datos
      * @param {{ Bean }} ${{ bean }} Objeto {{ Bean }}
@@ -40,9 +41,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             }
 
 {% endif %}
-            $data = ${{ bean}}->toArrayFor(
-                array({% for field in fields.nonPrimaryKeys %}'{{ field.getName() }}', {% endfor %})
-            );
+            $data = self::getMetadata()->toCreateArray(${{ bean }});
             $data = array_filter($data, array($this, 'isNotNull'));
             $this->getDb()->insert({{ Bean }}::TABLENAME, $data);
 {% if table.hasPrimaryKey() %}
@@ -64,9 +63,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
         $this->validateBean(${{ bean }});
         try
         {
-            $data = ${{ bean}}->toArrayFor(
-                array({% for field in fields.nonPrimaryKeys %}'{{ field.getName() }}', {% endfor %})
-            );
+            $data = self::getMetadata()->toUpdateArray(${{ bean }});
             $data = array_filter($data, array($this, 'isNotNull'));
             $this->getDb()->update({{ Bean }}::TABLENAME, $data, "{{ table.getPrimaryKey() }} = '{${{ bean }}->{{ table.getPrimaryKey().getter() }}()}'");
 {% if parent %}
@@ -78,6 +75,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
             $this->throwException("The {{ Bean }} can't be saved \n", $e);
         }
     }
+{% endif %}
 
 {% for manyToMany in table.getManyToManyCollection %}
 {% set relationColumn = manyToMany.getRelationColumn() %}
@@ -178,7 +176,7 @@ class {{ Catalog }} extends {% if parent %}{{ classes.get(parent.getObject() ~ '
     /**
      * @return \{{ Metadata.getFullname }}
      */
-    protected function getMetadata(){
+    protected static function getMetadata(){
         return \{{ Metadata.getFullname }}::getInstance();
     }
 

@@ -104,7 +104,11 @@ class {{ Metadata }} extends {{ AbstractMetadata }}
      * @return \{{ Factory.getFullname }}
      */
     public static function getFactory(){
-        return new {{ Factory }}();
+        static $factory = null;
+        if( null == $factory ){
+            $factory = new {{ Factory }}();
+        }
+        return $factory;
     }
 
 }

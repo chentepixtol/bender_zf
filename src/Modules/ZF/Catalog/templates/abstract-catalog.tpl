@@ -24,7 +24,7 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
     /**
      * @return \{{ MetadataInterface.getFullname }}
      */
-    abstract protected function getMetadata();
+    abstract protected static function getMetadata();
 
     /**
      *
@@ -124,6 +124,46 @@ abstract class {{ AbstractCatalog }} implements {{ Catalog }}
             $this->getDb()->rollBack();
         }else{
             $this->getDb()->exec("ROLLBACK TO SAVEPOINT LEVEL".self::$transLevel);
+        }
+    }
+    
+    /**
+     * @param Bean $bean
+     */
+    public function create($bean)
+    {
+        $this->validateBean($bean);
+        try
+        {
+            $data = $this->getMetadata()->toCreateArray($bean);
+            $data = array_filter($data, array($this, 'isNotNull'));
+            $this->getDb()->insert($this->getMetadata()->getTablename(), $data);
+            $this->getMetadata()->getFactory()->populate($bean, array(
+                $this->getMetadata()->getPrimaryKey() => $this->getDb()->lastInsertId(),
+            ));
+        }
+        catch(\Exception $e)
+        {
+            $this->throwException("The Object can't be saved \n", $e);
+        }
+    }
+
+    /**
+     * @param Bean $bean
+     */
+    public function update($bean)
+    {
+        $this->validateBean($bean);
+        try
+        {
+            $data = $this->getMetadata()->toUpdateArray($bean);
+            $data = array_filter($data, array($this, 'isNotNull'));
+            $this->getDb()->update($this->getMetadata()->getTablename(), $data, 
+                "{$this->getMetadata()->getPrimaryKey()} = '{$bean->getIndex()}'");
+        }
+        catch(\Exception $e)
+        {
+            $this->throwException("The Object can't be saved \n", $e);
         }
     }
     
