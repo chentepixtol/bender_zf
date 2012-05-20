@@ -1,6 +1,7 @@
 {% include 'header.tpl' %}
 
 {% set BaseQuery = classes.get('BaseQuery') %}
+{% set CatalogInterface = classes.get('Catalog') %}
 {% set Storage = classes.get('Storage') %}
 {% set FactoryStorage = classes.get('FactoryStorage') %}
 {% set Option = classes.get('Option') %}
@@ -34,21 +35,28 @@ abstract class {{ BaseQuery }} extends Query
 
     /**
      * @abstract
-     * @return \{{ classes.get('Catalog').getFullName() }}
+     * @return \{{ classes.get('Metadata').getFullName() }}
      */
-    abstract protected function getCatalog();
+    abstract protected function getMetadata();
 
-    /**
-     * @abstract
+     /**
+     * @param mixed $value
      * @return {{ BaseQuery }}
      */
-    abstract public function pk($primaryKey);
+    public function pk($value){
+        $this->filter(array(
+            $this->getMetadata()->getPrimaryKey() => $value,
+        ));
+        return $this;
+    }
 
     /**
-     * @abstract
      * @return array
      */
-    abstract public function fetchIds();
+    public function fetchIds(){
+       $this->removeColumn()->addColumn($this->getMetadata()->getPrimaryKey(), 'ids');
+       return $this->fetchCol();
+    }
 
     /**
      *
@@ -244,4 +252,11 @@ abstract class {{ BaseQuery }} extends Query
         return \Zend_Registry::get('container')->get('dbao')->getDbAdapter();
     }
     
+    /**
+     *
+     * @return \{{ CatalogInterface.getFullname }}
+     */
+    protected function getCatalog(){
+        return $this->getMetadata()->getCatalog();
+    }
 }

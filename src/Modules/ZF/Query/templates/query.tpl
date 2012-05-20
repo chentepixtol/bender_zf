@@ -3,7 +3,7 @@
 {{ Query.printNamespace() }}
 
 use Query\Query;
-{{ Catalog.printUse() }}
+{{ Metadata.printUse() }}
 {{ Bean.printUse() }}
 
 {% if parent %}
@@ -49,6 +49,7 @@ use Query\Query;
  * @method \{{ Query.getFullname() }} removeColumn() removeColumn($column = null)
  * @method \{{ Query.getFullname() }} distinct()
  * @method \{{ Query.getFullname() }} select()
+ * @method \{{ Query.getFullname() }} pk() pk($id)
  * @method \{{ Query.getFullname() }} addColumns() addColumns($columns)
  * @method \{{ Query.getFullname() }} addColumn() addColumn($column, $alias = null, $mutator = null)
  * @method \{{ Query.getFullname() }} addGroupBy() addGroupBy($groupBy)
@@ -62,11 +63,10 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 {
 
     /**
-     *
-     * @return \{{ Catalog.getFullName() }}
+     * @return \{{ Metadata.getFullname() }}
      */
-    protected function getCatalog(){
-        return \Zend_Registry::getInstance()->get('container')->get('{{ Catalog }}');
+    protected function getMetadata(){
+        return {{ Metadata }}::getInstance();
     }
 
     /**
@@ -95,25 +95,6 @@ class {{ Query }} extends{% if parentQuery %} {{ parentQuery}}{% else %} {{ Base
 {% endif%}
 {% endfor %}
         $this->setDefaultColumn($defaultColumn);
-    }
-
-    /**
-     * @param mixed $value
-     * @return {{ Query.getFullname() }}
-     */
-    public function pk($value){
-        $this->filter(array(
-            {{ Bean }}::{{ table.getPrimaryKey().getName().toUpperCase() }} => $value,
-        ));
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function fetchIds(){
-       $this->removeColumn()->addColumn({{ Bean }}::{{ table.getPrimaryKey().getName().toUpperCase() }}, 'ids');
-       return $this->fetchCol();
     }
 
     /**
