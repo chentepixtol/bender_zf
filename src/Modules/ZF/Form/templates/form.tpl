@@ -33,7 +33,7 @@ class {{ Form }} extends {% if parent %}{{ classes.get(parent.getObject()~'Form'
      *
      * @param {{ Bean }} ${{ bean }}
      */
-    public function set{{ Bean }}({{ Bean }} ${{ bean }}){
+    public function set{{ Bean }}({{ Bean }} ${{ bean }} = null){
         $this->{{ bean }} = ${{ bean }};
     }
 

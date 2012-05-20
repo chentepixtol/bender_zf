@@ -44,5 +44,28 @@ class {{ Collection }} extends {% if parent %}{{ classes.get(parent.getObject()~
         });
     }
 {% endif %}
+{% if table.getOptions.has('crud') and fields.hasColumnName('/status/i') %}
+{% set statusField = fields.getByColumnName('/status/i') %}
+
+    /**
+     *
+     * @return \{{ Collection.getFullname() }}
+     */
+    public function actives(){
+        return $this->filter(function({{ Bean }} ${{ bean }}){
+            return ${{ bean }}->isActive();
+        });
+    }
+    
+    /**
+     *
+     * @return \{{ Collection.getFullname() }}
+     */
+    public function inactives(){
+        return $this->filter(function({{ Bean }} ${{ bean }}){
+            return ${{ bean }}->isInactive();
+        });
+    }
+{% endif %}
 
 }
