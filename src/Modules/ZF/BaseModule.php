@@ -44,7 +44,7 @@ abstract class BaseModule extends AbstractModule
 
         $sufixes = array(
             'Collection', 'Factory', 'Catalog', 'Exception', 'Query',
-            'Form', 'Validator', 'Filter', 'Controller', 'Service',
+            'Form', 'Validator', 'Filter', 'Controller', 'Service', 'Metadata',
         );
         foreach( $sufixes as $suffix ){
             $this->addShorcutBySuffix($table, $suffix);

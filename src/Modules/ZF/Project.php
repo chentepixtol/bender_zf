@@ -2,8 +2,6 @@
 
 namespace Modules\ZF;
 
-use Modules\ZF\Service\Service;
-
 use Application\Generator\Module\ModuleCollection;
 use Application\Generator\ProjectInterface;
 use Modules\ZF\Unit\Unit;
@@ -15,6 +13,8 @@ use Modules\ZF\Collection\Collection;
 use Modules\ZF\Catalog\Catalog;
 use Modules\ZF\Exception\Exception;
 use Modules\ZF\Bean\Bean;
+use Modules\ZF\Metadata\Metadata;
+use Modules\ZF\Service\Service;
 
 /**
  *
@@ -46,6 +46,7 @@ class Project implements ProjectInterface
             new Query(),
             new Unit(),
             new Service(),
+            new Metadata()
         ));
     }
 
