@@ -2,7 +2,7 @@
     "name": "chentepixtol/bender_zf",
     "type": "library",
     "homepage": "https://github.com/chentepixtol/bender_zf",
-    "version": "1.0.0-beta5",
+    "version": "1.0.0-beta6",
     "license": "MIT",
     "require": {
         "php": ">=5.3.0"
